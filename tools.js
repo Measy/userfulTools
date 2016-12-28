@@ -224,7 +224,6 @@ Tools.each = function(obj, callback) {
         length = obj.length;
         for (; i < length; i++) {
             //用callback的返回值做循环控制，来提前结束each
-            var test = obj[i];
             if (callback.call(obj[i], i, obj[i]) === false) {
                 break;
             }
