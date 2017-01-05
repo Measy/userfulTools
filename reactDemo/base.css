@@ -1,0 +1,22 @@
+body{
+    font-family: "Helvetic Neue", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 30px;
+    margin: 0;
+}
+.commentTitle{
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
+.comment{
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    margin-bottom: 2px;
+    padding: 0 5px;
+}
+.comment span{
+    display: block;
+    margin: 15px 0;
+}

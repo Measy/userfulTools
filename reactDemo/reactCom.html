@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="base.css"/>
     <script src="./build/react.js"></script>
     <script src="./build/react-dom.js"></script>
     <script src="./build/browser.min.js"></script>
@@ -12,12 +13,12 @@
     <script type="text/babel">
         var Comment = React.createClass({
             itemClick: function(){
-                this.props.handleClick(this.props)
+                this.props.handleClick(this.props);
             },
             render: function(){
                 return (
                 <div className="comment" onClick={this.itemClick}>
-                            <h2 calssName="commentTitle">
+                            <h2 className="commentTitle">
                                 {this.props.title}
                             </h2>
                             <span>{this.props.children.toString()}</span>
@@ -27,8 +28,10 @@
         });
         var CommentList = React.createClass({
             handleClick: function(comment) {
+                console.log(this.test);
                 console.log(comment);
             },
+            test: "hhhhh",
             render: function(){
                 var commentNodes = this.props.comments.map(function(comment){
                     return(
@@ -36,7 +39,7 @@
                             {comment.text}
                         </Comment>
                     );
-                });
+                },this);
 
                 return(
                     <div className="commentList">
