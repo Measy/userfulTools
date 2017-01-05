@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="./build/react.js"></script>
+    <script src="./build/react-dom.js"></script>
+    <script src="./build/browser.min.js"></script>
+</head>
+
+<body>
+    <div id="content"></div>
+    <script type="text/babel">
+        var Comment = React.createClass({
+            itemClick: function(){
+                this.props.handleClick(this.props)
+            },
+            render: function(){
+                return (
+                <div className="comment" onClick={this.itemClick}>
+                            <h2 calssName="commentTitle">
+                                {this.props.title}
+                            </h2>
+                            <span>{this.props.children.toString()}</span>
+                        </div>
+                );
+            }
+        });
+        var CommentList = React.createClass({
+            handleClick: function(comment) {
+                console.log(comment);
+            },
+            render: function(){
+                var commentNodes = this.props.comments.map(function(comment){
+                    return(
+                        <Comment handleClick={this.handleClick} title={comment.title} key={comment.id} isShow={comment.isShow}>
+                            {comment.text}
+                        </Comment>
+                    );
+                });
+
+                return(
+                    <div className="commentList">
+                        {commentNodes}
+                    </div>
+                );
+            }
+        });
+        var comments = [{
+            id: "10001",
+            title: "前端",
+            text:"React",
+            isShow: true
+        },{
+            id: "10002",
+            title: "后端",
+            text: "java",
+            isShow: true
+        }];
+        ReactDOM.render(
+            <CommentList comments={comments}></CommentList>,
+            document.getElementById("content")
+        );
+    </script>
+</body>
+
+</html>
