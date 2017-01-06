@@ -2,15 +2,27 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="base.css"/>
-    <script src="./build/react.js"></script>
-    <script src="./build/react-dom.js"></script>
-    <script src="./build/browser.min.js"></script>
+    <link rel="stylesheet" href="stylesheets/base.css"/>
+    <script src="./javascripts/build/jquery.min.js"></script>
+    <script src="./javascripts/build/react.js"></script>
+    <script src="./javascripts/build/react-dom.js"></script>
+    <script src="./javascripts/build/browser.min.js"></script>
 </head>
 
 <body>
     <div id="content"></div>
     <script type="text/babel">
+        var CommentForm = React.createClass({
+            handelSubmit: function(e){
+                e.preventDefault();
+                var title = this.refs.title.value.trim();
+                var text = this.refs.text.value.trim();
+                if(!text || !title){
+                    return;
+                }
+                this
+            }
+        });
         var Comment = React.createClass({
             itemClick: function(){
                 this.props.handleClick(this.props);
