@@ -3,6 +3,6 @@ var ReactDOM = require('react-dom')
 var MyButtonController = require('./components/MyButtonController');
 
 ReactDOM.render(
-    <MyButtonController/>,
+    <MyButtonController />,
     document.querySelector('#example')
 );
