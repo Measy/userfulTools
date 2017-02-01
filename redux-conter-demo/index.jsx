@@ -12,7 +12,7 @@ const render = () => ReactDOM.render(
         value={store.getState()}
         onIncrement={() => store.dispatch({ type: 'INCREMENT' })}
         onDecrement={() => store.dispatch({ type: 'DECREMENT' })}
-        />,
+    />,
     rootEle
 )
 
