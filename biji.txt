@@ -1,0 +1,440 @@
+name是用于选中已经存在Chunk，然后将被选中Chunk里共用模块提取出来生成新的公共Chunk。比如现在有a，b，c三个Chunk，如果name等于[a,b]就会先选中a,b两个Chunk，然后将这两个Chunk共用模块提取出来；如果name为空并且async或者children被设置true，所有Chunk都会被选中，然后把所有Chunk中公共模块提取出来。filename是定义公共模块被提取出来的Chunk改叫什么名称。比如叫common.js或者common.chunk.js都可以。
+
+
+ // 提供公共代码
+new webpack.optimize.CommonsChunkPlugin('common.js'), // 默认会把所有入口节点的公共代码提取出来,生成一个common.js
+
+方式二，有选择的提取公共代码
+
+// 提供公共代码
+// 默认会把所有入口节点的公共代码提取出来,生成一个common.js
+// 只提取main节点和index节点
+new webpack.optimize.CommonsChunkPlugin('common.js',['main','index']), 
+
+方式三，有选择性的提取（对象方式传参） 
+推荐
+
+new webpack.optimize.CommonsChunkPlugin({
+    name:'common', // 注意不要.js后缀
+    chunks:['main','user','index']
+}),
+
+
+1、代码优化之:
+
+CommonsChunkPlugin - 抽取公共代码
+
+UglifyJsPlugin - 压缩混淆代码
+
+2、 依赖注入之:
+
+DefinePlugin - 自由变量注入
+
+ProvidePlugin - 模块变量标示符注入
+
+3、 文件抽取之:
+
+file-loader - 传送font等文件
+
+ExtractTextPlugin - 抽取css文件
+
+4、 开发体验优化之:
+
+WebpackNotifierPlugin - 编译完成动态通知
+
+HtmlWebpackPlugin - 采用模板引擎形式注入到html文件，让开发更加easy
+
+5、 目录/文件拷贝之:
+
+CopyWebpackPlugin - 目录及文件拷贝
+
+还有extract-text-webpack-plugin会在内部调用css-loader和style-loader把所有的CSS收集在一起，最后把结果抽取到一个单独的外部styles.css文件并且在index.html中链接styles.css。没有加的时候，css样式全部写在html页面里面
+
+
+
+ExtractTextPlugin("[name].css") 将css代码抽出来到相应的css文件中，和js文件一样，也需要手动创建相应的css文件
+
+new HtmlWebpackPlugin({
+    filename: '../index.html',
+    template: './app/Template/index.html',
+    inject: 'body',
+    hash: true
+})
+
+设置了模板文件和目标文件，inject的作用是将css文件和js文件插入到body的底部去，hash:true，是在css和js文件后面加hash值，解决了缓存问题(如果使用了HtmlWebpackPlugin，相应的css文件和js文件会自动生成，而无需我们手动去创建)，具体页面效果：
+
+
+“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录。
+
+处理图片
+
+这个和其他一样，也许你也已经会玩了。安装loader，处理文件。不过有个神奇的地方它可以根据你的需求将一些图片自动转成base64编码的，为你减轻很多的网络请求。
+
+安装url-loader
+
+配置config文件
+
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url?limit=40000'
+      }
+注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片
+
+
+启用source-map
+
+现在的代码是合并以后的代码，不利于排错和定位，只需要在config中添加
+
+  ...
+  devtool: 'eval-source-map',
+  ...
+这样出错以后就会采用source-map的形式直接显示你出错代码的位置。
+
+为css启用source-map
+
+javascript有了这个特性，css自然不能落后，其实很简单，只要在loader里面添加一个参数即可
+
+  ...
+  {
+    test: /\.scss$/,
+    loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+    include: APP_PATH
+  },
+  ...
+
+
+配置webpack-dev-server代理
+
+既然常用webpack做React一类的SPA，那么一个典型的例子就是前后端分离。后端是一个RESTful的server不管用什么写的。假定在本机他是类似http://localhost:5000/api/*这类的请求，现在添加配置让ajax请求可以直接proxy过去。
+
+    devServer: {
+        hot: true,
+        inline: true,
+        //其实很简单的，只要配置这个参数就可以了
+        proxy: {
+          '/api/*': {
+              target: 'http://localhost:5000',
+              secure: false
+          }
+        }
+    },
+重启以后 发现/api/*的请求都代理到http://localhost:5000去了～
+
+
+作者：wqb2017
+链接：https://zhuanlan.zhihu.com/p/24972761
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+也许你想在写代码的时候检查自己的js是否符合jshint的规范，那么隆重推荐preLoaders和postLoaders，上一节我们已经非常了解loaders了，用它来处理各种类型的文件。preLoaders顾名思义就是在loaders执行之前处理的，webpack的处理顺序是preLoaders - loaders - postLoaders。
+
+安装jshint
+
+npm install jshint-loader --save-dev
+在config文件中配置
+
+module: {
+...
+    //和loaders一样的语法，很简单
+    preLoaders: [
+        {
+               test: /\.jsx?$/,
+               include: APP_PATH,
+               loader: 'jshint-loader'
+        }
+    ]
+}
+
+...
+//配置jshint的选项，支持es6的校验
+jshint: {
+  "esnext": true
+},
+好了 现在每次npm run start的时候就可以看到jshint的提示信息啦
+
+
+作者：wqb2017
+链接：https://zhuanlan.zhihu.com/p/24972761
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+加载jQuery plugin或者其他legacy第三方库
+
+这个是非常有用的内容 你的项目有时候会要加载各种各样的第三方库，一些老的库不支持AMD或者CommonJS等一些先进的格式，比如一些jQuery的插件，它们都依赖jQuery，如果直接引用就会报错 jQuery is not undefined这类的错误，有几种方法解决
+
+先创建一个jQuery plugin: plugin.js
+
+(function ($) {
+    const shade = "#556b2f";
+    $.fn.greenify = function() {
+        this.css( "color", shade );
+        return this;
+    };
+}(jQuery));
+第一种方法 使用webpack.ProvidePlugin
+
+webpack提供一个插件 把一个全局变量插入到所有的代码中，在config.js里面配置
+
+  ...
+  plugins: [
+    new HtmlwebpackPlugin({
+      title: 'Hello World app'
+    }),
+    //provide $, jQuery and window.jQuery to every script
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    })
+  ]
+  ...
+在js中引用
+
+...
+//这个也不需要了 因为$, jQuery, window.jQuery都可以直接使用了
+//import $ from 'jquery';
+import './plugin.js';
+...
+myPromise.then((number) => {
+  $('body').append('<p>promise result is ' + number + ' now is ' + moment().format() + '</p>');
+  //call our jquery plugin!
+  $('p').greenify();
+});
+...
+发现我们插入的p里面的颜色已经变成了绿色！
+
+
+第二种方法 使用imports-loader
+
+先安装这个loader
+
+npm install imports-loader --save-dev
+然后在入口js中
+
+//注意这种写法 我们把jQuery这个变量直接插入到plugin.js里面了
+//相当于在这个文件的开始添加了 var jQuery = require('jquery');
+import 'imports?jQuery=jquery!./plugin.js';
+
+//后面的代码一样
+myPromise.then((number) => {
+  $('body').append('<p>promise result is ' + number + ' now is ' + moment().format() + '</p>');
+  //call our jquery plugin!
+  $('p').greenify();
+});
+
+
+分离app.js和第三方库
+
+现在我们build出来的只有一个bundle.js 如果第三方库很多的话，会造成这个文件非常大，减慢加载速度，现在我们要把第三方库和我们app本身的代码分成两个文件。
+
+修改entry入口文件
+
+  entry: {
+    app: path.resolve(APP_PATH, 'index.js'),
+    //添加要打包在vendors里面的库
+    vendors: ['jquery', 'moment']
+  },
+添加CommonsChunkPlugin
+
+  plugins: [
+    //这个使用uglifyJs压缩你的js代码
+    new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    //把入口文件里面的数组打包成verdors.js
+    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+    new HtmlwebpackPlugin({
+      title: 'Hello World app'
+    })
+  ]
+添加完毕 运行npm run build
+
+在build文件夹中发现如下结构
+
+budle.js
+index.html
+vendors.js
+
+
+生成多页面
+
+应用不可能都是SPA，不可能只生成一个html文件，如果想生成多个html页面这么玩？其实也是很简单的: 现在的需求是这样的，有两个页面，一个叫index.html 它需要引用vendors.js和app.js这两个文件，还有一个mobile.html页面他要引用vendors.js和mobile.js这两个文件。
+
+首先新建一个叫mobile.js的入口文件，比app.js更简单一些
+
+import './main.scss';
+import $ from 'jquery';
+import 'imports?jQuery=jquery!./plugin.js';
+
+$(document).ready(function() {
+  let app  = document.createElement('div');
+  app.innerHTML = '<h1>Hello World</h1>';
+  document.body.appendChild(app);
+  $('h1').greenify();
+});
+在config里面配置
+
+  entry: {
+    //三个入口文件，app, mobile和 vendors
+    app: path.resolve(APP_PATH, 'index.js'),
+    mobile: path.resolve(APP_PATH, 'mobile.js'),
+    vendors: ['jquery', 'moment']
+  },
+  output: {
+    path: BUILD_PATH,
+    //注意 我们修改了bundle.js 用一个数组[name]来代替，他会根据entry的入口文件名称生成多个js文件，这里就是(app.js,mobile.js和vendors.js)
+    filename: '[name].js'
+  },
+原来我们是没有模版文件的，原来利用的HtmlWebpackPlugin的默认模版。谁想到这伟大的插件还可以自定义模版。 所以新建一个专门放模版的文件夹templates,在里面加两个模版文件index.html 和 mobile.html
+
+index.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{%= o.htmlWebpackPlugin.options.title %}</title>
+  </head>
+  <body>
+    <h3>Welcome to webpack</h3>
+  </body>
+</html>
+mobile.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{%= o.htmlWebpackPlugin.options.title %}</title>
+  </head>
+  <body>
+    <h3>Welcome to mobile page</h3>
+  </body>
+</html>
+继续配置config.js,现在让HtmlwebpackPlugin可以生成多个文件
+
+...
+//Template的文件夹路径
+var TEM_PATH = path.resolve(ROOT_PATH, 'templates');
+...
+plugins: [
+  ...
+  //创建了两个HtmlWebpackPlugin的实例，生成两个页面
+  new HtmlwebpackPlugin({
+    title: 'Hello World app',
+    template: path.resolve(TEM_PATH, 'index.html'),
+    filename: 'index.html',
+    //chunks这个参数告诉插件要引用entry里面的哪几个入口
+    chunks: ['app', 'vendors'],
+    //要把script插入到标签里
+    inject: 'body'
+  }),
+  new HtmlwebpackPlugin({
+    title: 'Hello Mobile app',
+    template: path.resolve(TEM_PATH, 'mobile.html'),
+    filename: 'mobile.html',
+    chunks: ['mobile', 'vendors'],
+    inject: 'body'
+  })
+  ...
+]
+然后运行
+
+npm run build
+看看生成好的伟大的文件，没问题！
+
+app.js
+mobile.js
+vendors.js
+index.html
+mobile.html
+看看引用的对应关系，完美！！
+
+index.html
+
+<body>
+  <h3>Welcome to webpack</h3>
+  <script src="vendors.js"></script><script src="app.js"></script>
+</body>
+mobile.html
+
+<body>
+  <h3>Welcome to mobile page</h3>
+  <script src="vendors.js"></script><script src="mobile.js"></script>
+</body>
+
+
+
+
+生成Hash名称的script来防止缓存
+
+经典问题,代码更新了，但是浏览器有缓存，到时候就傻了。 怎么解决，换名字呗。可以直接在后面加参数,也可以直接换掉文件名字。 webpack提供给了我们非常简单的方法，基于文件的md5，只要把
+
+output: {
+  path: BUILD_PATH,
+  //只要再加上hash这个参数就可以了
+  filename: '[name].[hash].js'
+},
+运行完build以后，看看生成的文件，很完美～
+
+index.html
+
+<body>
+  <h3>Welcome to webpack</h3>
+  <script src="vendors.js"></script><script src="app.b6641abee64c999d95c1.js"></script>
+</body>
+好了，你现在了解webpack作为一个module bundler的精髓了吧，把我们的例子做成一个图，帮助你理解一下。
+
+
+9.配置根目录
+
+　　　　（1）当在命令行中输入webpack-dev-server --hot --inline，再在浏览器中输入localhost：端口号，浏览器会在项目的
+
+　　　　　根目录中去查找内容，通过--content-base可以配置根目录。
+
+　　　　如webpack-dev-server --hot --inline --content-base './build/'，在build文件夹中去加载index.html，如果没有
+
+　　　　index.html文件，将会在浏览器中显示所有build目录下的文件和文件夹
+
+
+
+二、如何缓存
+
+缓存控制要做到两件事情，提到缓存命中率
+
+对于没有修改的文件，从缓存中获取文件
+
+对于已经修改的文件，不要从缓存中获取
+
+围绕这两点，演绎出了很多方案，此处列两种：
+
+不处理，等待用户浏览器缓存过期，自动更新。这是最偷懒的，命中率低一些，同时可能会出现部分文件没有更新，导致报错的情况。
+
+Http头对文件设置很大的max-age，例如1年。同时，给每个文件命名上带上该文件的版本号，例如把文件的hash值做为版本号，topic. ef8bed6c.js。即是让文件很长时间不过期。
+
+当文件没有更新时，使用缓存的文件自然不会出错；
+
+当文件已经有更新时，其hash值必然改变，此时文件名变了，自然不存在此文件的缓存，于是浏览器会去加载最新的文件。
+
+从上面的截图可以看出来，通过WebPack是可以很轻松做到第二点的——只需要给文件名配置上[chunkhash:8]即可，其中8是指hash长度为8，默认是16。
+
+P.S.这样的处理效果已经很好了，但同样有劣处，即浏览器给这种缓存方式的缓存容量太少了，只有12Mb，且不分Host。所以更极致的做法是以文件名为Key，文件内容为value，缓存在localStorage里，命中则从缓存中取，不命中则去服务器取，虽然缓存容量也只有5Mb，但是每个Host是独享这5Mb的。
+
+三、自动生成页面
+
+文件名带上版本号后，每一次文件变化，都需要Html文件里手动修改引用的文件名，这种重复工作很琐碎且容易出错。
+
+使用 HtmlWebpackPlugin 和 ExtractTextPlugin 插件可以解决此问题。
+
+生成带JS的页面
+
+生成带css的页面
+　　new ExtractTextPlugin("comm.[contenthash:9].css")
+
+　　插件介绍到此为止，然而，还有一个关于同步加载和异步加载的问题，否则入口文件还是会很臃肿。
+
+
+关于同步加载和异步加载
+
+使用WebPack打包，最爽的事情莫过于可以像服务器编程那样直接require文件，看起来是同步地从服务器上取得文件直接就使用了。如下面的代码一样，没有任何异步逻辑，代码很干净。
+
+然而，这种爽是有代价的，对于直接require模块，WebPack的做法是把依赖的文件都打包在一起，造成文件很臃肿。
+
+所以在写代码的时候要注意适度同步加载，同步的代码会被合成并且打包在一起；异步加载的代码会被分片成一个个chunk，在需要该模块时再加载，即按需加载，这个度是要开发者自己把握的，同步加载过多代码会造成文件过大影响加载速度，异步过多则文件太碎，造成过多的Http请求，同样影响加载速度。
+
