@@ -121,10 +121,6 @@ javascript有了这个特性，css自然不能落后，其实很简单，只要�
 重启以后 发现/api/*的请求都代理到http://localhost:5000去了～
 
 
-作者：wqb2017
-链接：https://zhuanlan.zhihu.com/p/24972761
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 也许你想在写代码的时候检查自己的js是否符合jshint的规范，那么隆重推荐preLoaders和postLoaders，上一节我们已经非常了解loaders了，用它来处理各种类型的文件。preLoaders顾名思义就是在loaders执行之前处理的，webpack的处理顺序是preLoaders - loaders - postLoaders。
 
@@ -152,11 +148,6 @@ jshint: {
 },
 好了 现在每次npm run start的时候就可以看到jshint的提示信息啦
 
-
-作者：wqb2017
-链接：https://zhuanlan.zhihu.com/p/24972761
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 加载jQuery plugin或者其他legacy第三方库
 
