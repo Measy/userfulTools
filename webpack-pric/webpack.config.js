@@ -7,7 +7,9 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname,'dist'),
-        filename: "bundle.js"
+        publicPath: "/dist/",
+        filename: "[name].js",
+        chunkFilename: "[id].chunk.js"
     },
     resolve:{
         extensions: ['','.js','.jsx']
@@ -17,6 +19,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: "style!css"
+            },
+            {
+                test: /\.html$/,
+                loader: "html"
+            },
+            {
+                test: /\.(png|jpg)$/,
+                loader: "url-loader?limit=8192"
             }
         ]
     },

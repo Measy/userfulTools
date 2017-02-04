@@ -1,3 +1,5 @@
+https://github.com/webpack/docs/wiki/configuration#outputpublicpath
+
 name是用于选中已经存在Chunk，然后将被选中Chunk里共用模块提取出来生成新的公共Chunk。比如现在有a，b，c三个Chunk，如果name等于[a,b]就会先选中a,b两个Chunk，然后将这两个Chunk共用模块提取出来；如果name为空并且async或者children被设置true，所有Chunk都会被选中，然后把所有Chunk中公共模块提取出来。filename是定义公共模块被提取出来的Chunk改叫什么名称。比如叫common.js或者common.chunk.js都可以。
 
 
@@ -429,3 +431,107 @@ P.S.这样的处理效果已经很好了，但同样有劣处，即浏览器给�
 
 所以在写代码的时候要注意适度同步加载，同步的代码会被合成并且打包在一起；异步加载的代码会被分片成一个个chunk，在需要该模块时再加载，即按需加载，这个度是要开发者自己把握的，同步加载过多代码会造成文件过大影响加载速度，异步过多则文件太碎，造成过多的Http请求，同样影响加载速度。
 
+
+
+4. output：“path”项和“publicPath”项
+
+output项告诉webpack怎样存储输出结果以及存储到哪里。output的两个配置项“path”和“publicPath”可能会造成困惑。
+
+“path”仅仅告诉Webpack结果存储在哪里，然而“publicPath”项则被许多Webpack的插件用于在生产模式下更新内嵌到css、html文件里的url值。
+
+
+例如，在localhost（译者注：即本地开发模式）里的css文件中边你可能用“./test.png”这样的url来加载图片，但是在生产模式下“test.png”文件可能会定位到CDN上并且你的Node.js服务器可能是运行在HeroKu上边的。这就意味着在生产环境你必须手动更新所有文件里的url为CDN的路径。
+
+然而你也可以使用Webpack的“publicPath”选项和一些插件来在生产模式下编译输出文件时自动更新这些url。
+
+
+// 开发环境：Server和图片都是在localhost（域名）下
+.image { 
+  background-image: url('./test.png');
+ }
+// 生产环境：Server部署下HeroKu但是图片在CDN上
+.image { 
+  background-image: url('https://someCDN/test.png');
+ }
+
+
+ publicPath
+
+publicPath: '/buildPath/'
+css文件中，我们通常都会引入图片或者字符文件，而webpack打包过程中，其引用的文件可通过file-loader(loader部分会介绍)进行打包，并对其文件名进行处理。
+
+而在node引用中，我们可以搭建静态文件服务器，对某一文件夹（如express默认的public）中的静态资源进行管理，浏览器可以通过 /images/image-name.jpg直接访问。
+
+而webpack打包的时候，遇到通过相对路径或者绝对路径进行引用的文件，其路径可通过publicPath中指定的路径重新合成。
+
+如在css文件中有以下文件路径
+
+div{
+    background-image: url(../images/picA.jpg);
+}
+而在webpack.config.js中，有以下配置
+
+{
+
+    output: {
+        path: './build/public',
+        publicPath: '/buildPath/'
+    },
+    module: {
+        loaders: [
+            {
+                   test: /\.(png|jpe?g|eot|svg|ttf|woff2?)$/,
+                loader: ExtractTextPlugin.extract('',  "file-loader")
+            }
+        ]
+    }  
+}
+而webpack生成的css文件如下
+
+div{
+    background-image: url(/buildPath/picA.jpg);
+}
+
+
+When executed in the browser, webpack needs to know where you'll host the generated bundle. Thus it is able to request additional chunks (when using code splitting) or referenced files loaded via the file-loader or url-loader respectively.
+
+For example: If you configure your http server to host the generated bundle under /assets/ you should write: publicPath: "/assets/"
+
+output.path:
+
+Local disk directory to store all your output files (Absolute path).
+
+Example: path.join(__dirname, "build/")
+
+Webpack will output everything into localdisk/path-to-your-project/build/
+
+output.publicPath:
+
+Where you uploaded your bundled files. (Relative to server root)
+
+Example: /assets/
+
+Assumed you deployed the app at server root http://server/.
+
+By using /assets/, the app will find webpack assets at: http://server/assets/. Under the hood, every urls that webpack encounters will be re-written to begin with "/assets/".
+
+src="picture.jpg" Re-writes ➡ src="/assets/picture.jpg"
+
+Accessed by: (http://server/assets/picture.jpg)
+
+src="/img/picture.jpg" Re-writes ➡ src="/assets/img/picture.jpg"
+
+Accessed by: (http://server/assets/img/picture.jpg)
+Important:
+
+If you are using style-loader + loaders with css sourceMap option enabled, you have to set publicPath. Set it to the full absolute path of the server address, e.g. http://server/assets/so that resources will be loaded correctly.
+
+-----------------------------------------
+suppose you put all your js source file under src folder, and you config your webpack to build the source file to dist folder with output.path.
+
+But you want to serve your static assets under a more meaningful location like webroot/public/assets, this time you can use out.publicPath='/webroot/public/assets', so that in your html, you can reference your js with <script src="/webroot/public/assets/bundle.js"></script>.
+
+when you request webroot/public/assets/bundle.js the webpack-dev-server will find the js under the dist folder
+
+
+你启动webpack-dev-server后，你在目标文件夹中是看不到编译后的文件的,实时编译后的文件都保存到了内存当中。因此很多同学使用webpack-dev-server进行开发的时候都看不到编译后的文件

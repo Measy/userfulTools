@@ -11,4 +11,23 @@
         delay: 4000,
         duration: 800
     });
+    new slideModule({
+        dom: $('[node-type="iccAdvisorPicture2"]'),
+        delay: 3500,
+        duration: 1000
+    });
+
+    //添加对话框事件
+    var pageDialog = false;
+    $('.pictureShow a').click(function(){
+        var _id = $(this).attr('dialog-for');
+        require.ensure(["../module/dialog.js", "../module/dialogConfig.js"], function(require){
+            var dialogModule = require("../module/dialog.js");
+            var dialogConfig = require("../module/dialogConfig.js");
+            if(!pageDialog){
+                pageDialog = new dialogModule();
+            }
+            pageDialog.openDialogWith(dialogConfig[_id]);
+        });
+    });
 })();
