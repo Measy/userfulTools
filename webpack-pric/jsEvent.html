@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>JS事件委托</title>
+</head>
+
+<body>
+    <div class="pageContent">
+        <!--header-->
+        <div class="headerWrapper">
+            <div class="pageHeader clearfix">
+                <ul class="clearfix">
+                    <li>
+                        <a target="_blank" href="./index.html" title="首页">Home</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="./index2.html" title="合并commons">Commons</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://github.com/Measy/userfulTools/tree/master/webpack-pric" title="返回GitHub">GitHub</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://github.com/Measy" title="博客">Blog</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--事件委托-->
+        <div class="listWrapper clearfix" id="listWrapper">
+            <div class="list">
+                <button id="btn1">ADD!</button>
+                <ul id="list1">
+                    <li id="hello">Hello</li>
+                    <li id="world">World</li>
+                    <li id="hello">Welcome!</li>
+                </ul>
+            </div>
+            <div class="list">
+                <button id="btn2">添加!</button>
+                <ul id="list2">
+                    <li id="hello">Baidu</li>
+                    <li id="world">Alibaba</li>
+                    <li id="hello">Tencent</li>
+                </ul>
+            </div>
+        </div>
+
+        <!--footer-->
+        <div class="footerWrapper">
+            <div class="pageFooter">
+                <p>Measy @ 2017</p>
+            </div>
+        </div>
+    </div>
+    <script src="dist/vendors.js" type="text/javascript" charset="utf-8"></script>
+    <script src="dist/commons.js" type="text/javascript" charset="utf-8"></script>
+    <script src="dist/delegate.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

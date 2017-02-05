@@ -2,6 +2,10 @@
     //引入公共CSS与页面CSS
     require('../../css/vendor/reset.css');
     require('../../css/page/index.css');
+    require('../../css/module/footer.css');
+    
+    //引入header
+    require("../module/header.js");
 
     //引入并创建多个独立的slideModule模块
     var slideModule = require('../module/slide.js');

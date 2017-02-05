@@ -3,7 +3,8 @@ var webpack = require('webpack');
 module.exports = {
     entry: {
         index: "./src/js/page/index.js",
-        vendors: ['jquery']
+        delegate: "./src/js/page/jsEvent.js",
+        // vendors: ['jquery']
     },
     output: {
         path: path.join(__dirname,'dist'),
@@ -34,7 +35,8 @@ module.exports = {
         new webpack.ProvidePlugin({ //加载jq成为全局变量
             $: 'jquery'
         }),
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+        // new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+        new webpack.optimize.CommonsChunkPlugin("commons.js", ["index", "delegate"])
     ],
     devServer:{
         port: 8080,
