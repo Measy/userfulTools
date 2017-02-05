@@ -535,3 +535,9 @@ when you request webroot/public/assets/bundle.js the webpack-dev-server will fin
 
 
 你启动webpack-dev-server后，你在目标文件夹中是看不到编译后的文件的,实时编译后的文件都保存到了内存当中。因此很多同学使用webpack-dev-server进行开发的时候都看不到编译后的文件
+
+minChunks ：公共模块被使用的最小次数。比如配置为3，也就是同一个模块只有被3个以外的页面同时引用时才会被提取出来作为common chunks。
+
+　　minSize：作用类似于minChunks，只不过这里控制的文件大小。
+
+　　children：这个参数比较有意思，他可以将common chunks不单独存放，而是将其加入到所引用的页面JS中进行合并
