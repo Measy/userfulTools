@@ -17,14 +17,18 @@ module.exports = {
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+            },
+            {
+                test: /\.(png|jpg)$/,
+                loader: 'url-loader?limit=8192&name=./img/[hash].[ext]'
             }
         ]
     },
-    plugin: [
+    plugins: [
         new ExtractTextPlugin("css/[name].css"), //单独使用style标签加载css并设置其路径
         new HtmlWebpackPlugin({
             favicon: './src/img/favicon.ico', //favicon路径
-            filename: '/view/index.html', //生成的html存放路径,当对于path
+            filename: '/view/index.html', //生成的html存放路径,相对于path
             template: './src/view/index.html', //html的模板路径
             inject: true, //允许插件修改那些内容,包括head与body,true为两者皆允许
             hash: true, //为静态资源生成hash值
