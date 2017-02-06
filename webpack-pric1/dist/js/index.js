@@ -1,0 +1,1 @@
+!function(n){function t(o){if(e[o])return e[o].exports;var r=e[o]={exports:{},id:o,loaded:!1};return n[o].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var e={};return t.m=n,t.c=e,t.p="/webpack/dist/",t(0)}([function(n,t,e){e(1),e(5),e(8),document.write("Hello Index Js")},function(n,t){},,,,function(n,t){},,,function(n,t){}]);

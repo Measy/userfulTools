@@ -1,0 +1,27 @@
+{
+  "name": "webpack-pric1",
+  "version": "1.0.0",
+  "description": "auto touch html & source js&&css",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webpack",
+    "html-webpack-plugin"
+  ],
+  "author": "Measy",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^0.23.0",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "file-loader": "^0.8.5",
+    "html-loader": "^0.4.0",
+    "html-webpack-plugin": "^1.7.0",
+    "jquery": "^1.11.3",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
+  }
+}
