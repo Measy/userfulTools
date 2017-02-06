@@ -29,6 +29,12 @@ module.exports = {
         ]
     },
     plugins: [
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     },
+        //     except: ['$super', '$', 'exports', 'require'] //排除关键字不进行混淆，否则影响代码正常运行
+        // }),
         new webpack.ProvidePlugin({
             $: 'jquery'
         }),
@@ -44,5 +50,8 @@ module.exports = {
                 collapseWhitespace: false //移除空白符与换行符
             }
         })
-    ]
+    ],
+    devServer: {
+        contentBase: './dist/view' //运行目录设置为打包后的view目录
+    }
 }
