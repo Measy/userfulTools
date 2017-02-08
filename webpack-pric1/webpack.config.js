@@ -21,10 +21,17 @@ module.exports = {
             {
                 test: /\.(png|jpg)$/,
                 loader: 'url-loader?limit=8192&name=./img/[hash].[ext]'
+            },
+            {
+                test: /\.html$/,
+                loader: 'html'
             }
         ]
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            $: 'jquery'
+        }),
         new ExtractTextPlugin("css/[name].css"), //单独使用style标签加载css并设置其路径
         new HtmlWebpackPlugin({
             favicon: './src/img/favicon.ico', //favicon路径
