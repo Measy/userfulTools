@@ -1,0 +1,2 @@
+）Access-Control-Request-Headers
+该字段是一个逗号分隔的字符串，指定浏览器CORS请求会额外发送的头信息字段，上例是X-Custom-Header。
