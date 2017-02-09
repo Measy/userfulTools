@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var autoRoutes = require('express-auto-routes');
 var CORS = require('./middlewares/CORS');
 var simpleLogger = require('./middlewares/simpleLogger');
-var simpleSession = require('./middlewares/simpleUserSession');
+var simpleUserSession = require('./middlewares/simpleUserSession');
 
 var app = express();
 app.use(CORS);
