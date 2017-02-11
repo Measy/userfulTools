@@ -584,3 +584,20 @@ minChunks ：公共模块被使用的最小次数。比如配置为3，也就是
 　　webpack已经内嵌了uglifyJS来完成对JS与CSS的压缩混淆，无需引用额外的插件。
 
 　　这里需要注意的是压缩的时候需要排除一些关键字，不能混淆，比如$或者require，如果混淆的话就会影响到代码的正常运行。
+
+
+
+resolve对象
+  resolve: {
+            alias:{ jquery: path.resolve(process.cwd(),'src/lib/jquery.js')},
+            extensions:['.js','.json']
+        }
+resolve对象是在webpack预编译时，就加载进整个webpack编译的配置中的。
+
+比如alias会建立文件标识符映射表
+
+require('jquery')==> require('/Users/**/src/lib/jquery.js')
+
+比如webpack.ProvidePlugin，它会在对编译结果再加工的操作过程中进行自定义的变量注入，当模块中碰到比如_这个变量的时候，webpack将从缓存的module中取出underscore模块加载进引用_的文件(compilation.assets)。
+
+重要：这里Loader的resolved相对于它们应用的的资源的路径。这意味着它们不是相对 配置文件的路径 。如果你已经用npm 安装过loader而且 你的 node_ｍoudles文件夹不在所有源文件的父文件夹中，webpack会找不到 loader.你需要添加 node-modules文件夹,作为 resolveLoader.root 选项的绝对路径。
