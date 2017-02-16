@@ -601,3 +601,27 @@ require('jquery')==> require('/Users/**/src/lib/jquery.js')
 比如webpack.ProvidePlugin，它会在对编译结果再加工的操作过程中进行自定义的变量注入，当模块中碰到比如_这个变量的时候，webpack将从缓存的module中取出underscore模块加载进引用_的文件(compilation.assets)。
 
 重要：这里Loader的resolved相对于它们应用的的资源的路径。这意味着它们不是相对 配置文件的路径 。如果你已经用npm 安装过loader而且 你的 node_ｍoudles文件夹不在所有源文件的父文件夹中，webpack会找不到 loader.你需要添加 node-modules文件夹,作为 resolveLoader.root 选项的绝对路径。
+
+resolve: 其中最常用的有alias及 extensions,其中alias作用为别名定义，可定义webpack打包的文件别名(防止长文件的多次书写)，譬如 alias下定义moment: “moment/min/moment-with-locales.min.js”，后期便可使用require(‘moment’)得到moment-with-locales.min.js文件，同时譬如我们不需要引入node_modules的react的全部，而只需引入下面的部分react.min.js，则也可以通过react别名定义，重写其查找路径，从而减少其打包时间，’react’:’react/dist/react.min.js’ 
+extensions则自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
+
+webpack hot middleware 是什麼?
+
+我們都知道 webpack dev server 有提供一種 Hot Module Replacement/Hot Reloading 熱替換的功能。在一般 webpack-dev-server 的時候我們會在 webpack.config.js 加入 new webpack.HotModuleReplacementPlugin() 或設定來啟用。
+
+而 webpack hot middleware 是給 webpack-dev-middleware 用的。就是讓我們在一般的 server 上加上熱替換的功能，總結來說就是 webpack-dev-middleware + webpack-hot-middleware 即可讓我們用 express 客製一個有熱替換功能的 webpack 開發伺服器。
+
+new webpack.optimize.OccurenceOrderPlugin() 是为组件和模块分配ID，通过这个插件webpack可以分析和优先考虑使用最多的模块，并为它们分配最小的ID，通过分析ID，可以建议降低总文件的大小。
+
+使用 browserHistory 时碰到个问题，路由的跳转是匹配根目录而不是项目目录。
+例如目录为 localhost/login 正常，但目录为 http://localhost/path/login 就会报错了。
+可以通过 useRouterHistory 定义 router 的根目录
+
+What is that ?_k=ckuvup junk in the URL?
+
+When a history transitions around your app with push or replace, it can store "location state" that doesn't show up in the URL on the new location, think of it a little bit like post data in an HTML form.
+
+The DOM API that hash history uses to transition around is simply window.location.hash = newHash, with no place to store location state. But, we want all histories to be able to use location state, so we shim it by creating a unique key for each location and then store that state in session storage. When the visitor clicks "back" and "forward" we now have a mechanism to restore the location state.
+
+require.ensure() API的第三个参数是给这个模块命名，否则 
+chunkFilename: "[name].min.js" 中的[name] 是一个自动分配的、可读性很差的id

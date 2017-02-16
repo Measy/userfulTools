@@ -61,12 +61,63 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.(js|jsx)$/,
-            loaders: (function(){
+            loaders: (function () {
                 var _loaders = ['babel?' + JSON.stringify({
                     cacheDirectory: true,
-                    plugins
-                })]
+                    plugins: [
+                        'transform-runtime',
+                        'transfrom-decorators-legacy'
+                    ],
+                    presets: ['es2015', 'react', 'stage-0'],
+                    env: {
+                        production: {
+                            presets: ['react-optimize']
+                        }
+                    }
+                }), 'eslint'];
+
+                //开发环境下引入React Hot loader
+                if (env === 'development') {
+                    _loaders.unshift('react-hot');
+                }
+                return _loaders;
             })(),
-        }]   
-    }
-}
+            include: src,
+            exclude: /node_modules/
+        }, {
+            test: /\.json$/,
+            loader: 'json'
+        }, {
+            test: /\.html$/,
+            loader: 'html'
+        }, {
+            test: /\.(png|jpe?g|gif|svg)$/,
+            loader: 'url',
+            query: {
+                limit: 10240, //10k以下用base64
+                name: 'img/[name]-[hash:6].[ext]'
+            }
+        },{
+            test:/\.(woff2?|eot|ttf|otf)$/,
+            loader: 'url-loader?limit=10240&name=fonts/[name]-[hash:6].[ext]'
+        }]
+    },
+    eslint: {
+        formatter: require('eslint-friendly-formatter')
+    },
+    plugins: [
+        new NyanProgressPlugin(), //进度条
+        new webpack.DefinePlugin({
+            'process.env': { //给React / Redux打包用的
+                NODE_ENV: JSON.stringify('production')
+            },
+            // ===========================
+            // 配置开发全局常量
+            // ===========================
+            __DEV__: env === 'development',
+            __PROD__: env === 'production',
+            __COMPONENT_DEVTOOLS__: false, //是否使用组件形式的 Redux DevTools
+            __WHY_DID_YOU_UPDATE__: false //是否检测不必要的组件重渲染
+        })
+    ]
+};
