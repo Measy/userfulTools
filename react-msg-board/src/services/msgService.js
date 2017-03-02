@@ -12,15 +12,15 @@ class MsgService {
       * @return {Promise}
       */
     fetch({author = '', pageIdx = 1, quantity, msgId} = {}) {
-        let url = '/msg/';
+        let url = '/msg/'
 
         if (msgId) {
-            url += msgId;
+            url += msgId
         } else {
-            url = `${url}?author=${author}&pageIdx=${pageIdx}&quantity=${quantity}`;
+            url = `${url}?author=${author}&pageIdx=${pageIdx}&quantity=${quantity}`
         }
 
-        return xhr({ url });
+        return xhr({ url })
     }
 
     /**
@@ -33,7 +33,7 @@ class MsgService {
             method: 'post',
             url: '/msg',
             body: msgBody
-        });
+        })
     }
 
     /**
@@ -64,5 +64,5 @@ class MsgService {
     }
 }
 
-//实例化后输出
+// 实例化后输出
 export default new MsgService()

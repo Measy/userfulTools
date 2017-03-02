@@ -5,8 +5,8 @@
  */
 import React from 'react'
 
-//由于render中用的是call/apply,因此这里不能使用箭头函数
-//（因为箭头函数没有自己的 this！无法通过 call/apply 改变）
+// 由于render中用的是call/apply,因此这里不能使用箭头函数
+// （因为箭头函数没有自己的 this！无法通过 call/apply 改变）
 export default function () {
     return (
         <form onSubmit={(e) => this.handleSubmit(e)}>

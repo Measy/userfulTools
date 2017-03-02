@@ -44,7 +44,7 @@ module.exports = {
             // ===========================
             ASSET: path.join(src, 'assets'),
             COMPONENT: path.join(src, 'components'),
-            COMPONENT: path.join(src, 'redux/actions'),
+            ACTION: path.join(src, 'redux/actions'),
             REDUCER: path.join(src, 'redux/reducers'),
             STORE: path.join(src, 'redux/store'),
             ROUTE: path.join(src, 'routes'),
@@ -66,7 +66,7 @@ module.exports = {
                     cacheDirectory: true,
                     plugins: [
                         'transform-runtime',
-                        'transfrom-decorators-legacy'
+                        'transform-decorators-legacy'
                     ],
                     presets: ['es2015', 'react', 'stage-0'],
                     env: {

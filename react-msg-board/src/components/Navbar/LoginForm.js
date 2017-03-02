@@ -8,7 +8,7 @@ export default class LoginForm extends Component {
         // 在其他地方绝不能使用 this.state.XXX = XXX
         // 只能使用 this.setState({ XXX: XXX })
         this.state = { username: '' }
-        this.handleChange = handleChange.bind(this) //mixin
+        this.handleChange = handleChange.bind(this) // mixin
     }
 
     handleSubmit() {
@@ -26,7 +26,7 @@ export default class LoginForm extends Component {
                 className="navbar-form navbar-right"
                 onSubmit={
                     (e) => {
-                        e.preventDefault() //防止页面跳转
+                        e.preventDefault() // 防止页面跳转
                         this.handleSubmit
                     }
                 }>

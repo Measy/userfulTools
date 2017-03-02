@@ -13,7 +13,7 @@ class UserService {
             method: 'post',
             url: '/login',
             body: userData
-        });
+        })
     }
 
     /**
@@ -21,7 +21,7 @@ class UserService {
      * @return {Promise}
      */
     logout() {
-        return xhr({ url: '/logout' });
+        return xhr({ url: '/logout' })
     }
 }
 

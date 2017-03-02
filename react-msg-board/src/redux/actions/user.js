@@ -2,8 +2,8 @@ import userService from 'SERVICE/userService'
 // ======================================================
 // Action Type
 // ======================================================
-const LOG_IN = 'LOG_IN';
-const LOG_OUT = 'LOG_OUT';
+const LOG_IN = 'LOG_IN'
+const LOG_OUT = 'LOG_OUT'
 
 // ======================================================
 // Action Creator
@@ -59,6 +59,6 @@ export default {
 // 故在此直接给出处理逻辑
 // ================================
 export const ACTION_HANDLERS = {
-    [LOG_IN]: (userData, {payload}) => payload, //payload is userData
+    [LOG_IN]: (userData, {payload}) => payload, // payload is userData
     [LOG_OUT]: () => null
 }

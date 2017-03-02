@@ -18,8 +18,8 @@ export default class Navbar extends Component {
 
     render() {
         let {
-            userData, login, logout, //通过connect获取
-            location: {pathname} //通过App传入
+            userData, login, logout, // 通过connect获取
+            location: {pathname} // 通过App传入
         } = this.props
 
         return (

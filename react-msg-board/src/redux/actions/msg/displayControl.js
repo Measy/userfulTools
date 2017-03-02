@@ -2,11 +2,11 @@ import initState from 'STORE/initState'
 // ======================================================
 // Action Type
 // ======================================================
-const SPECIFY_AUTHOR = 'SPECIFY_AUTHOR';
-const PREV_PAGE = 'PREV_PAGE';
-const NEXT_PAGE = 'NEXT_PAGE';
-const CHANGE_QUANTITY = 'CHANGE_QUANTITY';
-const RESET_DISPLAY_CONTROL = 'RESET_DISPLAY_CONTROL';
+const SPECIFY_AUTHOR = 'SPECIFY_AUTHOR'
+const PREV_PAGE = 'PREV_PAGE'
+const NEXT_PAGE = 'NEXT_PAGE'
+const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
+const RESET_DISPLAY_CONTROL = 'RESET_DISPLAY_CONTROL'
 
 // ======================================================
 // Action Creator
@@ -50,16 +50,16 @@ export const ACTION_HANDLERS = {
         { ...displayControl, authorSpecified }
     ),
     [PREV_PAGE]: (displayControl, action) => {
-        let pageIdx = displayControl.pageIdx;
-        pageIdx = pageIdx <= 1 ? 1 : pageIdx - 1;
-        return { ...displayControl, pageIdx };
+        let pageIdx = displayControl.pageIdx
+        pageIdx = pageIdx <= 1 ? 1 : pageIdx - 1
+        return { ...displayControl, pageIdx }
     },
     [NEXT_PAGE]: (displayControl, action) => {
         return { ...displayControl, pageIdx: displayControl.pageIdx + 1 }
     },
     [CHANGE_QUANTITY]: (displayControl, {payload: quantity}) => {
-        quantity = ~~quantity || 10;
-        return { ...displayControl, quantity };
+        quantity = ~~quantity || 10
+        return { ...displayControl, quantity }
     },
     [RESET_DISPLAY_CONTROL]: (displayControl, action) => (
         { ...initState.msg.displayControl }

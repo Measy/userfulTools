@@ -13,7 +13,7 @@ export default class TodoInput extends Component {
         if (!content) return
 
         this.props.addTodo(content)
-        this.setState({ inputVal: '' }) //清空输入框
+        this.setState({ inputVal: '' }) // 清空输入框
     }
 
     render() {

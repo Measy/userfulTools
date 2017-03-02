@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-/*高阶组件 High Order Component例子*/
+/* 高阶组件 High Order Component例子*/
 const ExampleHoc = WrappedComponent => class extends Component {
     componentWillMount() {
         console.info('[HoC] componentWillMount')

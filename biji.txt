@@ -1016,3 +1016,91 @@ class LoggingButton extends React.Component {
   }
 }
 The problem with this syntax is that a different callback is created each time the LoggingButton renders. In most cases, this is fine. However, if this callback is passed as a prop to lower components, those components might do an extra re-rendering. We generally recommend binding in the constructor or using the property initializer syntax, to avoid this sort of performance problem.
+
+
+If contextTypes is defined within a component, the following lifecycle methods will receive an additional parameter, the context object:
+
+constructor(props, context)
+componentWillReceiveProps(nextProps, nextContext)
+shouldComponentUpdate(nextProps, nextState, nextContext)
+componentWillUpdate(nextProps, nextState, nextContext)
+componentDidUpdate(prevProps, prevState, prevContext)
+
+
+
+createBrowserHistory({
+  basename: '',             // The base URL of the app (see below)
+  forceRefresh: false,      // Set true to force full page refreshes
+  keyLength: 6,             // The length of location.key
+  // A function to use to confirm navigation with the user (see below)
+  getUserConfirmation: (message, callback) => callback(window.confirm(message))
+})
+
+
+
+Customize your history further
+
+If you'd like to further customize the history options or use other enhancers from history you can use useRouterHistory.
+
+Be aware that useRouterHistory already pre-enhances your history factory with the useQueries and useBasename enhancers from history.
+
+Examples:
+
+Defining a basename:
+
+import { useRouterHistory } from 'react-router'
+import { createHistory } from 'history'
+
+const history = useRouterHistory(createHistory)({
+  basename: '/base-path'
+})
+Using the useBeforeUnload enhancer:
+
+import { useRouterHistory } from 'react-router'
+import { createHistory, useBeforeUnload } from 'history'
+
+const history = useRouterHistory(useBeforeUnload(createHistory))()
+
+history.listenBeforeUnload(function () {
+  return 'Are you sure you want to leave this page?'
+})
+
+
+
+
+
+
+
+Route Components
+
+A route's component is rendered when that route matches the URL. The router will inject the following properties into your component when it's rendered:
+
+Injected Props
+
+location
+
+The current location.
+
+params
+
+The dynamic segments of the URL.
+
+route
+
+The route that rendered this component.
+
+router
+
+Contains methods relevant to routing. Most useful for imperatively transitioning around the application.
+
+routes
+
+The routes registered with the router.
+
+routeParams
+
+A subset of this.props.params that were directly specified in this component's route. For example, if the route's path is users/:userId and the URL is /users/123/portfolios/345 then this.props.routeParams will be {userId: '123'}, and this.props.params will be {userId: '123', portfolioId: '345'}.
+
+children
+
+The matched child route element to be rendered. If the route has named components then this will be undefined, and the components will instead be available as direct properties on this.props.

@@ -2,10 +2,10 @@ import msgService from 'SERVICE/msgService'
 // ======================================================
 // Action Type
 // ======================================================
-const FETCH_MSG = 'FETCH_MSG';
-const ADD_MSG = 'ADD_MSG';
-const MOD_MSG = 'MOD_MSG';
-const DEL_MSG = 'DEL_MSG';
+const FETCH_MSG = 'FETCH_MSG'
+const ADD_MSG = 'ADD_MSG'
+const MOD_MSG = 'MOD_MSG'
+const DEL_MSG = 'DEL_MSG'
 
 // ======================================================
 // Action Creator
@@ -16,7 +16,7 @@ const fetchMsg = queryBody => dispatch =>
         .then(msgs => dispatch({
             type: FETCH_MSG,
             payload: msgs
-        }));
+        }))
 
 const addMsg = msgBody => dispatch =>
     msgService
@@ -26,7 +26,7 @@ const addMsg = msgBody => dispatch =>
                 type: ADD_MSG,
                 payload: msg
             })
-            return msg;
+            return msg
         })
 
 const modMsg = msgBody => dispatch =>
@@ -37,7 +37,7 @@ const modMsg = msgBody => dispatch =>
                 type: MOD_MSG,
                 payload: msg
             })
-            return msg; //便于链式调用
+            return msg // 便于链式调用
         })
 
 const delMsg = msgId => dispatch =>
@@ -60,6 +60,6 @@ export const ACTION_HANDLERS = {
         msg => msg.id === payload.id ? payload : msg
     ),
     [DEL_MSG]: (msgs, {payload}) => msgs.filter(
-        msg => msg.id !== payload //payload is msgId
+        msg => msg.id !== payload // payload is msgId
     )
 }

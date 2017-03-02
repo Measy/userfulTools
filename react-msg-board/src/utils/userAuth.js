@@ -6,10 +6,10 @@ import store, { history } from 'STORE'
  * https://github.com/reactjs/react-router/blob/master/docs/API.md#onEnter
  */
 export default function userAuth(nextState, replace, next) {
-    let {userData} = store.getState();
-    if (userData) return next();
+    let {userData} = store.getState()
+    if (userData) return next()
 
-    alert('请先登入后访问');
-    history.goBack();
+    alert('请先登入后访问')
+    history.goBack()
     // next(replace('/loginPage')) # 举例:跳转到登入页的写法
 }

@@ -6,7 +6,7 @@ export default class LogoutDropdown extends Component {
     }
 
     logout() {
-        //退出登入后返回首页
+        // 退出登入后返回首页
         this.props.logout()
         this.context.router.replace('/')
     }

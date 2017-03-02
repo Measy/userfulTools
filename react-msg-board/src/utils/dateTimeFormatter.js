@@ -21,15 +21,15 @@ export default function dateTimeFormatter(time, type) {
     let second = date.getSeconds()
 
     switch (type) {
-        case 0: //01-05
+        case 0: // 01-05
             return `${zeroFill(month)}-${zeroFill(day)}`
-        case 1: //11:12
+        case 1: // 11:12
             return `${zeroFill(hours)}:${zeroFill(minutes)}`
-        case 2: //2015-01-05
+        case 2: // 2015-01-05
             return `${year}-${zeroFill(month)}-${zeroFill(day)}`
-        case 3: //2015-01-05 11:12
+        case 3: // 2015-01-05 11:12
             return `${year}-${zeroFill(month)}-${zeroFill(day)}  ${zeroFill(hours)}:${zeroFill(minutes)}`
-        default: //2015-01-05 11:12:13
+        default: // 2015-01-05 11:12:13
             return `${year}-${zeroFill(month)}-${zeroFill(day)}  ${zeroFill(hours)}:${zeroFill(minutes)}:${zeroFill(second)}`
     }
 }

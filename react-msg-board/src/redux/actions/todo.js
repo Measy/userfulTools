@@ -1,9 +1,9 @@
 // ======================================================
 // Action Type
 // ======================================================
-const ADD_TODO = 'ADD_TODO';
-const DEL_TODO = 'DEL_TODO';
-const TOGGLE_TODO = 'TOGGLE_TODO';
+const ADD_TODO = 'ADD_TODO'
+const DEL_TODO = 'DEL_TODO'
+const TOGGLE_TODO = 'TOGGLE_TODO'
 
 // ======================================================
 // Action Creator
@@ -11,22 +11,22 @@ const TOGGLE_TODO = 'TOGGLE_TODO';
 const addTodo = (content) => ({
     type: ADD_TODO,
     payload: {
-        id: setTimeout(() => { }), //生成唯一id的一种方式
+        id: setTimeout(() => { }), // 生成唯一id的一种方式
         content,
         completed: false,
         createdAt: Date.now()
     }
-});
+})
 
 const toggleTodo = (todoId) => ({
     type: TOGGLE_TODO,
     payload: todoId
-});
+})
 
 const delTodo = (todoId) => ({
     type: DEL_TODO,
     payload: todoId
-});
+})
 
 /* default 导出所有 Action Creators */
 export default {

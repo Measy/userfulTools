@@ -6,8 +6,8 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux'
 
 const browserHistory = useRouterHistory(createBrowserHistory)({
-    basename: '' //相当于rootPath
-});
+    basename: '' // 相当于rootPath
+})
 
 export const historyMiddleware = routerMiddleware(browserHistory)
 

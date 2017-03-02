@@ -31,7 +31,7 @@ export function createRootReducer() {
  * @param  {String}   key
  * @param  {Function} reducer
  */
-export function injectReducer(key, reducer){
-    asyncReducers[key] = reducer;
-    store.replaceReducer(createRootReducer()); //替换当前的rootReducer,加入异步加载的reducer
+export function injectReducer(key, reducer) {
+    asyncReducers[key] = reducer
+    store.replaceReducer(createRootReducer()) // 替换当前的rootReducer,加入异步加载的reducer
 }

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import msgService from 'SERVICE/msgService'
-import handleChange from 'MINXIN/handleChange'
-import tpl from './msg-form.jsx' //分拆写JSX模板减少单个文件代码量
+import handleChange from 'MIXIN/handleChange'
+import tpl from './msg-form.jsx' // 分拆写JSX模板减少单个文件代码量
 
 /* 为什么不直接 const initState = { ... } 而是用函数返回呢？
    皆因直接传 initState 仅是传引用，initState 本身可被修改 */
@@ -21,11 +21,11 @@ export default class MsgForm extends Component {
         // 实际上最完善的形式的确就是如下写法
         super(props, context)
 
-        //初始state必须定义，否则会报错
-        //就像在Vue中需要再data中定义默认值
+        // 初始state必须定义，否则会报错
+        // 就像在Vue中需要再data中定义默认值
         this.state = getInitState()
 
-        this.handleChange = handleChange.bind(this) //mixin
+        this.handleChange = handleChange.bind(this) // mixin
     }
 
     componentDidMount() {
@@ -52,8 +52,8 @@ export default class MsgForm extends Component {
             return this.setState(nextState)
         }
 
-        //情况3：强制刷新 /msg/detail/:msgId 后，跳转到/msg/modify/:msgId
-        //此时 state中msgs为空，需要立即从后端API获取
+        // 情况3：强制刷新 /msg/detail/:msgId 后，跳转到/msg/modify/:msgId
+        // 此时 state中msgs为空，需要立即从后端API获取
         msgService.fetch({ msgId }).then(msg => {
             let {id, title, content, author} = msg
             if (!msg || author !== username) {
@@ -64,7 +64,7 @@ export default class MsgForm extends Component {
     }
 
     handleIllegal() {
-        //使用setTimeout防止阻塞跳转
+        // 使用setTimeout防止阻塞跳转
         setTimeout(() => alert('非法访问'))
         location.replace('/msg')
 

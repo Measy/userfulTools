@@ -17,7 +17,7 @@ export default class MsgList extends Component {
      * 【拓展阅读】无限循环坑 http://stackoverflow.com/questions/36189775
      */
     componentWillReceiveProps(nextProps) {
-        //query string 变化
+        // query string 变化
         if (nextProps.location.search !== this.props.location.search) {
             return this.props.specifyAuthor(nextProps.location.query.author)
         }

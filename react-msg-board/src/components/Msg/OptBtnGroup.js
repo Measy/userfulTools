@@ -14,7 +14,7 @@ export default class OptBtnGroup extends Component {
         delMsg(msgId)
 
         if (parentName === 'MsgDetail') {
-            //若是在详情页面删除， 应该跳转回列表项
+            // 若是在详情页面删除， 应该跳转回列表项
             this.context.router.replace('/msg')
         }
     }
@@ -22,7 +22,7 @@ export default class OptBtnGroup extends Component {
     render() {
         let {isAuthor, msgId, children} = this.props
 
-        return ( //请使用括号包含JSX
+        return ( // 请使用括号包含JSX
             <div
                 role="group"
                 className="btn-group btn-group-xs pull-right">

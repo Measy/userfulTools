@@ -6,7 +6,7 @@ export default class DisplayControl extends Component {
     constructor(props) {
         super(props)
         this.state = { _quantity: props.quantity }
-        this.handleChange = handleChange.bind(this) //mixin
+        this.handleChange = handleChange.bind(this) // mixin
     }
 
     /* 【拓展阅读】setState 的“异步”坑：https://zhuanlan.zhihu.com/p/20328570 */

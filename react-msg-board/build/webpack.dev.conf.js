@@ -5,7 +5,7 @@ var webpack = require('webpack'),
     BrowserSyncPlugin = require('browser-sync-webpack-plugin'),
     SOURCE_MAP = false;
 
-config, output.filename = '[name].js';
+config.output.filename = '[name].js';
 config.output.chunkFilename = '[id].js';
 
 config.devtool = SOURCE_MAP ? 'eval-source-map' : false;
