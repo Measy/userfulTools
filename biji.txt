@@ -584,3 +584,523 @@ minChunks ：公共模块被使用的最小次数。比如配置为3，也就是
 　　webpack已经内嵌了uglifyJS来完成对JS与CSS的压缩混淆，无需引用额外的插件。
 
 　　这里需要注意的是压缩的时候需要排除一些关键字，不能混淆，比如$或者require，如果混淆的话就会影响到代码的正常运行。
+
+
+
+resolve对象
+  resolve: {
+            alias:{ jquery: path.resolve(process.cwd(),'src/lib/jquery.js')},
+            extensions:['.js','.json']
+        }
+resolve对象是在webpack预编译时，就加载进整个webpack编译的配置中的。
+
+比如alias会建立文件标识符映射表
+
+require('jquery')==> require('/Users/**/src/lib/jquery.js')
+
+比如webpack.ProvidePlugin，它会在对编译结果再加工的操作过程中进行自定义的变量注入，当模块中碰到比如_这个变量的时候，webpack将从缓存的module中取出underscore模块加载进引用_的文件(compilation.assets)。
+
+重要：这里Loader的resolved相对于它们应用的的资源的路径。这意味着它们不是相对 配置文件的路径 。如果你已经用npm 安装过loader而且 你的 node_ｍoudles文件夹不在所有源文件的父文件夹中，webpack会找不到 loader.你需要添加 node-modules文件夹,作为 resolveLoader.root 选项的绝对路径。
+
+resolve: 其中最常用的有alias及 extensions,其中alias作用为别名定义，可定义webpack打包的文件别名(防止长文件的多次书写)，譬如 alias下定义moment: “moment/min/moment-with-locales.min.js”，后期便可使用require(‘moment’)得到moment-with-locales.min.js文件，同时譬如我们不需要引入node_modules的react的全部，而只需引入下面的部分react.min.js，则也可以通过react别名定义，重写其查找路径，从而减少其打包时间，’react’:’react/dist/react.min.js’ 
+extensions则自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
+
+webpack hot middleware 是什麼?
+
+我們都知道 webpack dev server 有提供一種 Hot Module Replacement/Hot Reloading 熱替換的功能。在一般 webpack-dev-server 的時候我們會在 webpack.config.js 加入 new webpack.HotModuleReplacementPlugin() 或設定來啟用。
+
+而 webpack hot middleware 是給 webpack-dev-middleware 用的。就是讓我們在一般的 server 上加上熱替換的功能，總結來說就是 webpack-dev-middleware + webpack-hot-middleware 即可讓我們用 express 客製一個有熱替換功能的 webpack 開發伺服器。
+
+new webpack.optimize.OccurenceOrderPlugin() 是为组件和模块分配ID，通过这个插件webpack可以分析和优先考虑使用最多的模块，并为它们分配最小的ID，通过分析ID，可以建议降低总文件的大小。
+
+使用 browserHistory 时碰到个问题，路由的跳转是匹配根目录而不是项目目录。
+例如目录为 localhost/login 正常，但目录为 http://localhost/path/login 就会报错了。
+可以通过 useRouterHistory 定义 router 的根目录
+
+What is that ?_k=ckuvup junk in the URL?
+
+When a history transitions around your app with push or replace, it can store "location state" that doesn't show up in the URL on the new location, think of it a little bit like post data in an HTML form.
+
+The DOM API that hash history uses to transition around is simply window.location.hash = newHash, with no place to store location state. But, we want all histories to be able to use location state, so we shim it by creating a unique key for each location and then store that state in session storage. When the visitor clicks "back" and "forward" we now have a mechanism to restore the location state.
+
+require.ensure() API的第三个参数是给这个模块命名，否则 
+chunkFilename: "[name].min.js" 中的[name] 是一个自动分配的、可读性很差的id
+
+
+##Route中components参数的高级用法
+
+Route中components中接收的参数不仅仅只是实际的组件，还可以是对象，通过这样的用法，我们可以更灵活的控制组件的展示。
+
+import React, { Component } from 'react';
+import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router';
+
+import './App.css';
+
+const HomeHeader = () => <h1>HomeHeader</h1>
+const HomeBody = () => <h1>HomeBody</h1>
+const AboutHeader = () => <h1>AboutHeader</h1>
+const AboutBody = () => <h1>AboutBody</h1>
+
+const Container = (props) =>
+  <div>
+    {props.header}
+    {props.body}
+    <Links />
+  </div>
+
+const Links = () =>
+  <nav>
+    <Link to="/">Hello</Link>
+    <Link to="/about">About</Link>
+  </nav>
+
+class App extends Component {
+  render() {
+    return (
+      <Router history={hashHistory}>
+        <Route path="/" component={Container}>
+          <IndexRoute components={{ header:HomeHeader, body:HomeBody }} />
+          <Route path="about" components={{ header:AboutHeader, body:AboutBody }} />
+        </Route>
+      </Router>
+    );
+  }
+}
+
+export default App;
+
+
+
+
+
+
+使用query获取URL中的参数
+
+我们可以将URL中访问的参数获取，并且应用到组件中。
+
+import React, { Component } from 'react';
+import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router';
+
+import './App.css';
+
+const Page = (props) =>
+  <div>
+    <h1>{props.location.query.message || 'Hello'}</h1>
+  </div>
+
+class App extends Component {
+  render() {
+    return (
+      <Router history={hashHistory}>
+        <Route path="/" component={Page} />
+      </Router>
+    );
+  }
+}
+
+export default App;
+然后在url中输入http://localhost:8080/#/?message=wn，页面中就会显示wn。
+
+
+另外，我们还可以在Link组件中设置pathname和query变量
+
+import React, { Component } from 'react';
+import { Router, Route, hashHistory, Link, IndexRoute } from 'react-router';
+
+import './App.css';
+
+const Page = (props) =>
+  <div>
+    <h1>{props.location.query.message || 'Hello'}</h1>
+  </div>
+
+const Links = () =>
+  <nav>
+    <Link to={{ pathname: "/", query: {message: "guoyongfeng"} }} />
+  </nav>
+
+class App extends Component {
+  render() {
+    return (
+      <Router history={hashHistory}>
+        <Route path="/" component={Page} />
+      </Router>
+    );
+  }
+}
+
+export default App;
+
+babel-plugin-transform-decorators-legacy支持最es7的(decorator)装饰器语法
+
+
+在 Route 中，可以使用 component 指定单个组件，或者通过 components 指定多个组件集合；
+
+
+在这里需要指出每一个路由（Route）中声明的组件（比如 SignIn）在渲染之前都会被传入一些 props，具体是在源码中的 RoutingContext.js 中完成，主要包括：
+
+history 对象，它提供了很多有用的方法可以在路由系统中使用，比如刚刚用到的history.replaceState，用于替换当前的 URL，并且会将被替换的 URL 在浏览器历史中删除。函数的第一个参数是 state 对象，第二个是路径；
+location 对象，它可以简单的认为是 URL 的对象形式表示，这里要提的是 location.state，这里 state 的含义与 HTML5 history.pushState API 中的 state 对象一样。每个 URL 都会对应一个 state 对象，你可以在对象里存储数据，但这个数据却不会出现在 URL 中。实际上，数据被存在了 sessionStorage 中；
+
+
+值得注意的是：javascript脚本执行window.history.pushState和window.history.replaceState不会触发onpopstate事件。也不会发生onhashchange事件
+还有一点注意的是，谷歌浏览器和火狐浏览器在页面第一次打开的反应是不同的，谷歌浏览器奇怪的是回触发onpopstate事件，而火狐浏览器则不会。
+
+在 实际应用的时候，重新刷新页面的时候，我们通常使用： location.reload() 或者是 history.go(0) 来做。因为这种做法就像是客户端点F5刷新页面，所以页面的method="post"的时候，会出现“网页过期”的提示。那是因为Session的安全 保护机制。可以想到： 当调用 location.reload() 方法的时候， aspx页面此时在服务端内存里已经存在， 因此必定是 IsPostback 的。如果有这种应用： 我们需要重新加载该页面，也就是说我们期望页面能够在服务端重新被创建， 我们期望是 Not IsPostback 的。这里，location.replace() 就可以完成此任务。被replace的页面每次都在服务端重新生成。你可以这么写： 
+
+
+
+
+Javascript:history.go()和history.back()的用法和区别 
+简单的说就是：go(-1): 返回上一页，原页面表单中的内容会丢失；back(): 返回上一页，原页表表单中的内容会保留。 
+
+history.go(-1):后退+刷新 
+history.back():后退 
+
+之所以注意到这个区别，是因为不同的浏览器的后退行为也是有区别的，而区别就跟Javascript:history.go()和history.back()的区别类似。 
+
+chrome和ff浏览器后退页面，会刷新后退的页面，若有数据请求也会提交数据申请。类似于 
+history.go(-1) 
+
+而safari（包括桌面版和ipad版本）的后退按钮则不会刷新页面，也不会提交数据申请。类似于 
+Javascript:history.back()。 
+
+
+很多人用pushState()和popstate()这两个新的API去做单页的前进后退功能，
+A：
+1，pushState({state},'','原url+新的query部分') 然后以新的query部分为参数进行ajax请求
+2，当回退的时候，因为浏览器的回退和前进在只有query改变的时候不会重新发起请求，通过popstate监听url的改变事件，来重新ajax请求 进行局部刷新
+
+B：
+1，pushState({state},'','原url') 通过和state相关的参数进行xhr请求局部刷新
+2，当回退的时候因为url没有改变，浏览器不会重新发起请求，通过popstate监听获取state对象，进行xhr请求刷新
+
+C: 通过url对象中的hash去实现前端路由，因为hash的变化并不会引起浏览器请求 window.location.hash  hashChange事件
+
+在组件外部使用导航
+虽然在组件内部可以使用 this.context.router 来实现导航，但许多应用想要在组件外部使用导航。使用Router组件上被赋予的history可以在组件外部实现导航。
+
+// your main file that renders a Router
+import { Router, browserHistory } from 'react-router'
+import routes from './app/routes'
+render(<Router history={browserHistory} routes={routes}/>, el)
+// somewhere like a redux/flux action file:
+import { browserHistory } from 'react-router'
+browserHistory.push('/some/path')
+
+
+getComponents(location, callback)
+
+与 component 一样，但是是异步的，对于 code-splitting 很有用。
+
+callback signature
+
+cb(err, components)
+
+<Route path="courses/:courseId" getComponent={(location, cb) => {
+  // 做一些异步操作去查找组件
+  cb(null, {sidebar: CourseSidebar, content: Course})
+}}/>
+
+<Router routes={routes} />
+Router history={history} children={routes}/> routes是children的别名
+
+onEnter(nextState, replaceState, callback?)
+
+当 route 即将进入时调用。它提供了下一个路由的 state，一个函数重定向到另一个路径。this 会触发钩子去创建 route 实例。
+
+当 callback 作为函数的第三个参数传入时，这个钩子将是异步执行的，并且跳转会阻塞直到 callback 被调用。
+
+
+PlainRoute
+
+route 定义的一个普通的 JavaScript 对象。 Router 把 JSX 的 <Route> 转化到这个对象中，如果你喜欢，你可以直接使用它们。 所有的 props 都和 <Route> 的 props 一样，除了那些列在这里的。
+
+Props
+
+childRoutes
+
+子 route 的一个数组，与在 JSX route 配置中的 children 一样。
+
+实际上可不引入 this.context.router，直接使用 this.props.history 即可
+ * 但控制台会报 Warning: [react-router] `props.history` and `context.history` are deprecated. Please use `context.router`. http://tiny.cc/router-contextchanges
+
+
+ 下面是一个高级应用，当用户离开一个路径的时候，跳出一个提示框，要求用户确认是否离开。
+
+const Home = withRouter(
+  React.createClass({
+    componentDidMount() {
+      this.props.router.setRouteLeaveHook(
+        this.props.route, 
+        this.routerWillLeave
+      )
+    },
+
+    routerWillLeave(nextLocation) {
+      // 返回 false 会继续停留当前页面，
+      // 否则，返回一个字符串，会显示给用户，让其自己决定
+      if (!this.state.isSaved)
+        return '确认要离开？';
+    },
+  })
+)
+上面代码中，setRouteLeaveHook方法为Leave钩子指定routerWillLeave函数。该方法如果返回false，将阻止路由的切换，否则就返回一个字符串，提示用户决定是否要切换。
+
+
+接下来请看路由系统内部是如何修改 UI 的。在得到了新的 location 对象后，系统内部的 matchRoutes 方法会匹配出 Route 组件树中与当前 location 对象匹配的一个子集，并且得到了 nextState，具体的匹配算法不在这里讲解，感兴趣的同学可以点击查看，state 的结构如下：
+
+nextState = {
+  location, // 当前的 location 对象
+  routes, // 与 location 对象匹配的 Route 树的子集，是一个数组
+  params, // 传入的 param，即 URL 中的参数
+  components, // routes 中每个元素对应的组件，同样是数组
+};
+
+
+
+不要把正则表达式字面量（或者正则表达式构造器）放在 while 条件表达式里。由于每次迭代时 lastIndex 的属性都被重置，如果匹配，将会造成一个死循环。
+
+
+ store.subscribe()
+Store 允许使用store.subscribe方法设置监听函数，一旦 State 发生变化，就自动执行这个函数。
+
+import { createStore } from 'redux';
+const store = createStore(reducer);
+
+store.subscribe(listener);
+显然，只要把 View 的更新函数（对于 React 项目，就是组件的render方法或setState方法）放入listen，就会实现 View 的自动渲染。
+store.subscribe方法返回一个函数，调用这个函数就可以解除监听。
+
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState())
+);
+
+unsubscribe();
+
+import { createStore } from 'redux'
+...
+const store = createStore(reducer, initialState) // store 是靠传入 reducer 生成的哦！
+现在您只需要记住 reducer 是一个 函数，负责更新并返回一个新的 state
+而 initialState 主要用于前后端同构的数据同步（详情请关注 React 服务端渲染）
+
+
+
+
+mapStateToProps会订阅 Store，每当state更新的时候，就会自动执行，重新计算 UI 组件的参数，从而触发 UI 组件的重新渲染。
+mapStateToProps是一个函数，它接受state作为参数，返回一个对象。这个对象的属性，代表 UI 组件的同名参数
+
+mapStateToProps的第一个参数总是state对象，还可以使用第二个参数，代表容器组件的props对象。
+
+// 容器组件的代码
+//    <FilterLink filter="SHOW_ALL">
+//      All
+//    </FilterLink>
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    active: ownProps.filter === state.visibilityFilter
+  }
+}
+使用ownProps作为参数后，如果容器组件的参数发生变化，也会引发 UI 组件重新渲染。
+connect方法可以省略mapStateToProps参数，那样的话，UI 组件就不会订阅Store，就是说 Store 的更新不会引起 UI 组件的更新。
+
+redux-thunk
+fetchPosts返回了一个函数，而普通的 Action Creator 默认返回一个对象。
+（2）返回的函数的参数是dispatch和getState这两个 Redux 方法，普通的 Action Creator 的参数是 Action 的内容。
+（3）在返回的函数之中，先发出一个 Action（requestPosts(postTitle)），表示操作开始。
+（4）异步操作结束之后，再发出一个 Action（receivePosts(postTitle, json)），表示操作结束。
+
+
+mapDispatchToProps是connect函数的第二个参数，用来建立 UI 组件的参数到store.dispatch方法的映射。也就是说，它定义了哪些用户的操作应该当作 Action，传给 Store。它可以是一个函数，也可以是一个对象。
+如果mapDispatchToProps是一个函数，会得到dispatch和ownProps（容器组件的props对象）两个参数。
+
+const mapDispatchToProps = (
+  dispatch,
+  ownProps
+) => {
+  return {
+    onClick: () => {
+      dispatch({
+        type: 'SET_VISIBILITY_FILTER',
+        filter: ownProps.filter
+      });
+    }
+  };
+}
+从上面代码可以看到，mapDispatchToProps作为函数，应该返回一个对象，该对象的每个键值对都是一个映射，定义了 UI 组件的参数怎样发出 Action。
+如果mapDispatchToProps是一个对象，它的每个键名也是对应 UI 组件的同名参数，键值应该是一个函数，会被当作 Action creator ，返回的 Action 会由 Redux 自动发出。举例来说，上面的mapDispatchToProps写成对象就是下面这样。
+
+const mapDispatchToProps = {
+  onClick: (filter) => {
+    type: 'SET_VISIBILITY_FILTER',
+    filter: filter
+  };
+}
+
+
+eact的diff算法用在什么地方呢？当组件更新的时候，react会创建一个新的虚拟dom树并且会和之前储存的dom树进行比较，这个比较多过程就用到了diff算法，所以组件初始化的时候是用不到的。react提出了一种假设，相同的组件具有类似的结构，而不同的组件具有不同的结构。在这种假设之上进行逐层的比较，如果发现对应的节点是不同的，那就直接删除旧的节点以及它所包含的所有子节点然后替换成新的节点。如果是相同的节点，则只进行属性的更改。
+对于列表的diff算法稍有不同，因为列表通常具有相同的结构，在对列表节点进行删除，插入，排序的时候，单个节点的整体操作远比一个个对比一个个替换要好得多，所以在创建列表的时候需要设置key值，这样react才能分清谁是谁。当然不写key值也可以，但这样通常会报出警告，通知我们加上key值以提高react的性能。
+
+
+组件在初始化时会触发5个钩子函数：
+
+1、getDefaultProps()
+
+设置默认的props，也可以用dufaultProps设置组件的默认属性。
+2、getInitialState()
+
+在使用es6的class语法时是没有这个钩子函数的，可以直接在constructor中定义this.state。此时可以访问this.props。
+3、componentWillMount()
+
+组件初始化时只调用，以后组件更新不调用，整个生命周期只调用一次，此时可以修改state。
+4、 render()
+
+react最重要的步骤，创建虚拟dom，进行diff算法，更新dom树都在此进行。此时就不能更改state了。
+5、componentDidMount()
+
+组件渲染之后调用，可以通过this.getDOMNode()获取和操作dom节点，只调用一次。
+在更新时也会触发5个钩子函数：
+
+6、componentWillReceivePorps(nextProps)
+
+组件初始化时不调用，组件接受新的props时调用。
+7、shouldComponentUpdate(nextProps, nextState)
+
+react性能优化非常重要的一环。组件接受新的state或者props时调用，我们可以设置在此对比前后两个props和state是否相同，如果相同则返回false阻止更新，因为相同的属性状态一定会生成相同的dom树，这样就不需要创造新的dom树和旧的dom树进行diff算法对比，节省大量性能，尤其是在dom结构复杂的时候。不过调用this.forceUpdate会跳过此步骤。
+8、componentWillUpdata(nextProps, nextState)
+
+组件初始化时不调用，只有在组件将要更新时才调用，此时可以修改state
+9、render()
+
+不多说
+10、componentDidUpdate()
+
+组件初始化时不调用，组件更新完成后调用，此时可以获取dom节点。
+还有一个卸载钩子函数
+
+11、componentWillUnmount()
+
+组件将要卸载时调用，一些事件监听和定时器需要在此时清除。
+以上可以看出来react总共有10个周期函数（render重复一次），这个10个函数可以满足我们所有对组件操作的需求，利用的好可以提高开发效率和组件性能。
+
+组件之间的通信
+react推崇的是单向数据流，自上而下进行数据的传递，但是由下而上或者不在一条数据流上的组件之间的通信就会变的复杂。解决通信问题的方法很多，如果只是父子级关系，父级可以将一个回调函数当作属性传递给子级，子级可以直接调用函数从而和父级通信。
+
+组件层级嵌套到比较深，可以使用上下文Context来传递信息，这样在不需要将函数一层层往下传，任何一层的子级都可以通过this.context直接访问。
+
+兄弟关系的组件之间无法直接通信，它们只能利用同一层的上级作为中转站。而如果兄弟组件都是最高层的组件，为了能够让它们进行通信，必须在它们外层再套一层组件，这个外层的组件起着保存数据，传递信息的作用，这其实就是redux所做的事情。
+
+组件之间的信息还可以通过全局事件来传递。不同页面可以通过参数传递数据，下个页面可以用location.query来获取。
+
+
+先简单说一下redux和react是怎么配合的。react-redux提供了connect和Provider两个好基友，它们一个将组件与redux关联起来，一个将store传给组件。组件通过dispatch发出action，store根据action的type属性调用对应的reducer并传入state和这个action，reducer对state进行处理并返回一个新的state放入store，connect监听到store发生变化，调用setState更新组件，此时组件的props也就跟着变化。
+
+注意，定义“类”的方法的时候，前面不需要加上function这个关键字，直接把函数定义放进去了就可以了。另外，方法之间不需要逗号分隔，加了会报错。
+
+
+If you aren't using property initializer syntax, you can use an arrow function in the callback:
+
+class LoggingButton extends React.Component {
+  handleClick() {
+    console.log('this is:', this);
+  }
+
+  render() {
+    // This syntax ensures `this` is bound within handleClick
+    return (
+      <button onClick={(e) => this.handleClick(e)}>
+        Click me
+      </button>
+    );
+  }
+}
+The problem with this syntax is that a different callback is created each time the LoggingButton renders. In most cases, this is fine. However, if this callback is passed as a prop to lower components, those components might do an extra re-rendering. We generally recommend binding in the constructor or using the property initializer syntax, to avoid this sort of performance problem.
+
+
+If contextTypes is defined within a component, the following lifecycle methods will receive an additional parameter, the context object:
+
+constructor(props, context)
+componentWillReceiveProps(nextProps, nextContext)
+shouldComponentUpdate(nextProps, nextState, nextContext)
+componentWillUpdate(nextProps, nextState, nextContext)
+componentDidUpdate(prevProps, prevState, prevContext)
+
+
+
+createBrowserHistory({
+  basename: '',             // The base URL of the app (see below)
+  forceRefresh: false,      // Set true to force full page refreshes
+  keyLength: 6,             // The length of location.key
+  // A function to use to confirm navigation with the user (see below)
+  getUserConfirmation: (message, callback) => callback(window.confirm(message))
+})
+
+
+
+Customize your history further
+
+If you'd like to further customize the history options or use other enhancers from history you can use useRouterHistory.
+
+Be aware that useRouterHistory already pre-enhances your history factory with the useQueries and useBasename enhancers from history.
+
+Examples:
+
+Defining a basename:
+
+import { useRouterHistory } from 'react-router'
+import { createHistory } from 'history'
+
+const history = useRouterHistory(createHistory)({
+  basename: '/base-path'
+})
+Using the useBeforeUnload enhancer:
+
+import { useRouterHistory } from 'react-router'
+import { createHistory, useBeforeUnload } from 'history'
+
+const history = useRouterHistory(useBeforeUnload(createHistory))()
+
+history.listenBeforeUnload(function () {
+  return 'Are you sure you want to leave this page?'
+})
+
+
+
+
+
+
+
+Route Components
+
+A route's component is rendered when that route matches the URL. The router will inject the following properties into your component when it's rendered:
+
+Injected Props
+
+location
+
+The current location.
+
+params
+
+The dynamic segments of the URL.
+
+route
+
+The route that rendered this component.
+
+router
+
+Contains methods relevant to routing. Most useful for imperatively transitioning around the application.
+
+routes
+
+The routes registered with the router.
+
+routeParams
+
+A subset of this.props.params that were directly specified in this component's route. For example, if the route's path is users/:userId and the URL is /users/123/portfolios/345 then this.props.routeParams will be {userId: '123'}, and this.props.params will be {userId: '123', portfolioId: '345'}.
+
+children
+
+The matched child route element to be rendered. If the route has named components then this will be undefined, and the components will instead be available as direct properties on this.props.
