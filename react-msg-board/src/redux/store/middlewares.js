@@ -2,9 +2,9 @@
 // 配置中间件
 // ======================================================
 import thunk from 'redux-thunk'
-import { historyMiddlewre } from './syncHistoryWithStore'
+import { historyMiddleware } from './syncHistoryWithStore'
 
-const middlewares = [thunk, historyMiddlewre]
+const middlewares = [thunk, historyMiddleware]
 
 if (__DEV__) {
     /** Redux Logger (P.S: 打印日志会造成轻微的卡顿) **/
