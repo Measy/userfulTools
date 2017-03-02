@@ -27,7 +27,7 @@ export default class LoginForm extends Component {
                 onSubmit={
                     (e) => {
                         e.preventDefault() // 防止页面跳转
-                        this.handleSubmit
+                        this.handleSubmit()
                     }
                 }>
 
