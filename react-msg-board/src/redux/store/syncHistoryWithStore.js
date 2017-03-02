@@ -11,6 +11,10 @@ const browserHistory = useRouterHistory(createBrowserHistory)({
 
 export const historyMiddleware = routerMiddleware(browserHistory)
 
+/**
+ * @param  {Store}
+ * @return {History} 增强版 history
+ */
 export default function (store) {
     return syncHistoryWithStore(
         browserHistory,
