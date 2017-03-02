@@ -21,38 +21,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//auto mount touters
+//auto mount routers
 var routes = autoRoutes(app);
 routes(path.join(__dirname, './controllers'));
 
-// catch 404 and forward to error handler
+// 404
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  res.status(404);
+  next({ _code: 404, _msg: 'Page not found' });
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
+// global err handler
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
+  console.error(err);
+  
+  if (err._status) res.status(err._status);
+
+  res.json({
+    _code: err._code || 1,
+    _msg: err._msg || err
   });
 });
 
@@ -60,5 +47,6 @@ if(!module.parent){
   var PORT = 8989;
   console.log('[INFO] Msg board RESTful API listening at localhost:%s', PORT);
   app.listen(PORT);
+}else{
+  module.exports = app;
 }
-module.exports = app;
