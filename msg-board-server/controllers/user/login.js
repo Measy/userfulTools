@@ -13,7 +13,6 @@ exports.post = {
         }
 
         userService.login({username});
-        console.log(111)
         res.json({username});
     }
 };

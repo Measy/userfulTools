@@ -12,7 +12,7 @@ const getInitState = () => ({ id: '', title: '', content: '' })
 const isAddMode = pathname => pathname.startsWith('/msg/add')
 
 export default class MsgForm extends Component {
-    static contentTypes = {
+    static contextTypes = {
         router: PropTypes.object.isRequired
     }
 

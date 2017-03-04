@@ -17,7 +17,7 @@ export default class DisplayControl extends Component {
     }
 
     _changeQuantity() {
-        this.props._changeQuantity(this.state._quantity)
+        this.props.changeQuantity(this.state._quantity)
     }
 
     render() {

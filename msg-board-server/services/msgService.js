@@ -53,7 +53,7 @@ MsgService.prototype.add = function(msgBody){
 MsgService.prototype._auth = function(authBody){
     var targetMsg = this.findById(authBody.id);
 
-    if(!targetMsg || targetMsg.author !== authBody.authBody.author){
+    if(!targetMsg || targetMsg.author !== authBody.author){
         console.info('[WARN] Record not found or auth failed');
         return false;
     }
@@ -63,8 +63,7 @@ MsgService.prototype._auth = function(authBody){
 
 MsgService.prototype.del = function(authBody){
     if(!this._auth(authBody)) return;
-
-    this.save(_.reject(this.read, {id: authBody.id}));
+    this.save(_.reject(this.read(), {id: authBody.id}));
     console.info('[INFO] Successfully deleted');
     return true;
 };
