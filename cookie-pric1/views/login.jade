@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title 登录
+    link(rel='stylesheet', href='/stylesheets/login.css')
+  body
+    .form-container
+      p.form-header 登录
+      form(action='login', method='POST', align='center')
+        table
+          tr
+            td
+              label(for='user') 账号：
+            td
+              input#user(type='text', name='login_username')
+          tr
+            td
+              label(for='pwd') 密码：
+            td
+              input#pwd(type='password', name='login_password')
+          tr
+            td(colspan='2', align='right')
+              input(type='submit', value='登录')
+    p #{msg}

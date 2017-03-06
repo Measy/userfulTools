@@ -1,0 +1,28 @@
+form {
+  margin: 12px;
+}
+a {
+  color: #00B7FF;
+}
+
+div.form-container {
+  display: inline-block;
+  border: 6px solid steelblue;
+  width: 280px;
+  border-radius: 10px;
+  margin: 12px;
+}
+
+p.form-header {
+  margin: 0px;
+  font: 24px bold;
+  color: white;
+  background: steelblue;
+  text-align: center;
+}
+
+input[type=submit]{
+  font: 18px bold;
+  width: 120px;
+  margin-left: 12px;
+}
