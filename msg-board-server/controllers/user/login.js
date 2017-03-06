@@ -11,7 +11,7 @@ exports.post = {
         if(!username){
             return next({_msg: 'invalid username'});
         }
-
+        res.cookie('isLogin','true')
         userService.login({username});
         res.json({username});
     }
