@@ -24,7 +24,8 @@
  * onClick={this.handleChange}
  */
 export default function handleChange(evt) {
+    const value = evt.target.type === 'checkbox' ? evt.target.checked : evt.target.value.trim()
     this.setState({
-        [evt.target.name]: evt.target.value.trim()
+        [evt.target.name]: value
     })
 }

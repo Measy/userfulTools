@@ -9,6 +9,8 @@ router.get('/', function (req, res, next) {
   if (req.session.user !== null) {
     req.user = req.session.user;
   }
+  console.log(req.session);
+  console.log(req.session.user);
   res.render('index', req);
 });
 

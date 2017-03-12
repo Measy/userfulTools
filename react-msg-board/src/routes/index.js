@@ -1,3 +1,5 @@
+import createContainer from 'UTIL/createContainer'
+
 export default {
     path: '/',
 
@@ -14,6 +16,25 @@ export default {
 
         // 强制“刷新”页面的hack
         { path: 'redirect', component: require('COMPONENT/Redirect').default },
+
+        // 登录页面
+        {
+            path: 'login',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    // 注入Reducer
+
+                    /* 组件连接state */
+                    const LoginContainer = createContainer(
+                        ({userDate}) => ({ userDate }), // mapStateToProps
+                        require('ACTION/user').default, // mapActionCreators,
+                        require('COMPONENT/Auth/').default // 木偶组件
+                    )
+
+                    cb(null, LoginContainer)
+                })
+            }
+        },
 
         // 无路由匹配的情况一定要放到最后，防止拦截所有路由
         { path: '*', component: require('COMPONENT/404').default }

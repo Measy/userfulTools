@@ -4,15 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var autoRoutes = require('express-auto-routes');
 var CORS = require('./middlewares/CORS');
 var simpleLogger = require('./middlewares/simpleLogger');
-var simpleUserSession = require('./middlewares/simpleUserSession');
+// var simpleUserSession = require('./middlewares/simpleUserSession');
 
 var app = express();
 app.use(CORS);
 app.use(simpleLogger);
-app.use(simpleUserSession);
+// app.use(simpleUserSession);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -20,21 +21,22 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: 'my secret test', name: 'user', cookie: { maxAge: 600000 } }));
 
 //auto mount routers
 var routes = autoRoutes(app);
 routes(path.join(__dirname, './controllers'));
 
 // 404
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.status(404);
   next({ _code: 404, _msg: 'Page not found' });
 });
 
 // global err handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.error(err);
-  
+
   if (err._status) res.status(err._status);
 
   res.json({
@@ -43,10 +45,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
-if(!module.parent){
+if (!module.parent) {
   var PORT = 8989;
   console.log('[INFO] Msg board RESTful API listening at localhost:%s', PORT);
   app.listen(PORT);
-}else{
+} else {
   module.exports = app;
 }
