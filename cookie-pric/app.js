@@ -26,7 +26,7 @@ app.use(session({
   name: 'user', 
   resave: true,
   saveUninitialized: true,
-  cookie: { maxAge: 6000 } 
+  cookie: { maxAge: 600000 } 
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
