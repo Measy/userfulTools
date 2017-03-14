@@ -1,7 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import handleChange from 'MIXIN/handleChange'
 
 export default class LoginForm extends Component {
+    static contextTypes = {
+        router: PropTypes.object.isRequired
+    }
+
     constructor(props) {
         super(props)
         // P.S: 仅能在构造函数中设置 state
@@ -12,9 +16,7 @@ export default class LoginForm extends Component {
     }
 
     handleSubmit() {
-        let username = this.state.username
-        if (!username) return alert('用户名为空')
-        this.props.login({ username })
+        this.context.router.push('/login')
     }
 
     render() {
@@ -30,17 +32,6 @@ export default class LoginForm extends Component {
                         this.handleSubmit()
                     }
                 }>
-
-                <div className="form-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="username"
-                        placeholder="请输入您的用户名"
-                        required
-                        value={this.state.username}
-                        onChange={this.handleChange} />
-                </div>
 
                 <button
                     type="submit"
