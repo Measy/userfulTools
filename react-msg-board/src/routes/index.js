@@ -22,17 +22,15 @@ export default {
             path: 'login',
             getComponent(nextState, cb) {
                 require.ensure([], (require) => {
-                    // 注入Reducer
-
                     /* 组件连接state */
                     const LoginContainer = createContainer(
-                        ({userDate}) => ({ userDate }), // mapStateToProps
+                        ({userData}) => ({ userData }), // mapStateToProps
                         require('ACTION/user').default, // mapActionCreators,
                         require('COMPONENT/Auth/').default // 木偶组件
                     )
 
                     cb(null, LoginContainer)
-                })
+                }, 'loginForm')
             }
         },
 

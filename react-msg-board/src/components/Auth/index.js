@@ -13,7 +13,16 @@ export default class LoginForm extends Component {
         this.handleChange = handleChange.bind(this)
 
         // 判断是否存在未过期的登入cookie，存在则有userData不重复登入
+        console.log('auth constructor')
+        console.log(this.props)
         let {userData} = this.props
+        if (userData) this.context.router.goBack()
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // 判断是否存在未过期的登入cookie，存在则有userData不重复登入
+        console.log('componentWillReceiveProps')
+        let {userData} = nextProps
         if (userData) this.context.router.goBack()
     }
 
