@@ -6,7 +6,7 @@ exports.get = {
     url: '/logout', //override default /user/logout
     middlewares: authentication,
     handler: function (req, res, next) {
-        userService.logout();
+        delete req.session.user;
         res.json(true);
     }
 }

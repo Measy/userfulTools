@@ -42,8 +42,8 @@ UserService.prototype.authUser = function (userData) {
     }
 };
 
-UserService.prototype.logout = function () {
-    this.delDb();
-};
+// UserService.prototype.logout = function () {
+//     this.delDb();
+// };
 
 module.exports = new UserService();
