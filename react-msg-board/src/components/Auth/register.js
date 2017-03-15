@@ -2,39 +2,37 @@ import React, { Component, PropTypes } from 'react'
 import handleChange from 'MIXIN/handleChange'
 import 'ASSET/css/loginForm.css'
 
-export default class LoginForm extends Component {
+export default class ResisterForm extends Component {
     static contextTypes = {
         router: PropTypes.object.isRequired
     }
 
     constructor(props) {
         super(props)
-        this.state = { username: '', password: '', remember: false }
+        this.state = { username: '', password: '', rePassword: '', email: '' }
         this.handleChange = handleChange.bind(this)
 
+        // 判断是否已经登录，未登录情况下才可以注册
         let {userData} = this.props
         if (userData) this.context.router.goBack()
     }
 
     componentWillReceiveProps(nextProps) {
-        // 判断是否存在未过期的登入cookie，存在则有userData不重复登入
+        // 判断是否存在登入cookie，存在则跳转到原来的界面
         let {userData} = nextProps
         if (userData) this.context.router.goBack()
     }
 
     handleSubmit() {
         let userData = this.state
-        this.props.login(userData)
+        this.props.register(userData)
     }
 
-    // 基础知识：  
-    // 网格系统:通过行和列布局  
-    // 行必须放在container内  
-    // 手机用col-xs-*  
-    // 平板用col-sm-*  
-    // 笔记本或普通台式电脑用col-md-*  
-    // 大型设备台式电脑用col-lg-*  
-    // 为了兼容多个设备，可以用多个col-*-*来控制；  
+    checkUsername() {
+        let username = this.state.username
+        this.props.checkUsername(username)
+    }
+
     render() {
         return (
             <div className="container">
@@ -48,7 +46,7 @@ export default class LoginForm extends Component {
                             }
                         }
                         className="form-horizontal col-sm-offset-3 col-md-offset-3"
-                        id="login_form">
+                        id="register_form">
                         <h3 className="form-title">Login to your account</h3>
                         <div className="col-sm-9 col-md-9">
                             <div className="form-group">
@@ -59,9 +57,9 @@ export default class LoginForm extends Component {
                                     placeholder="Username"
                                     name="username"
                                     autofocus="autofocus"
-                                    onChange={this.handleChange}
                                     value={this.state.username}
-                                    maxlength="20" />
+                                    onChange={this.handleChange}
+                                    onBlur={(e) => {this.checkUsername()}} />
                             </div>
                             <div className="form-group">
                                 <i className="fa fa-lock fa-lg"></i>
@@ -69,33 +67,45 @@ export default class LoginForm extends Component {
                                     className="form-control required"
                                     type="password"
                                     placeholder="Password"
+                                    id="register_password"
                                     name="password"
-                                    onChange={this.handleChange}
                                     value={this.state.password}
-                                    maxlength="8" />
+                                    onChange={this.handleChange} />
                             </div>
                             <div className="form-group">
-                                <label className="checkbox">
-                                    <input
-                                        type="checkbox"
-                                        name="remember"
-                                        value={this.state.remember}
-                                        onChange={this.handleChange} />
-                                    Remember me
-                                </label>
-                                <hr />
-                                <a href="javascript:;" id="register_btn" className="">Create an account</a>
+                                <i className="fa fa-check fa-lg"></i>
+                                <input
+                                    className="form-control required"
+                                    type="password"
+                                    placeholder="Re-type Your Password"
+                                    name="rpassword"
+                                    value={this.state.rePassword}
+                                    onChange={this.handleChange} />
+                            </div>
+                            <div className="form-group">
+                                <i className="fa fa-envelope fa-lg"></i>
+                                <input
+                                    className="form-control eamil"
+                                    type="text"
+                                    placeholder="Email"
+                                    name="email"
+                                    value={this.state.email}
+                                    onChange={this.handleChange} />
                             </div>
                             <div className="form-group">
                                 <input
                                     type="submit"
                                     className="btn btn-success pull-right"
-                                    value="Login " />
+                                    value="Sign Up " />
+                                <input
+                                    type="button"
+                                    className="btn btn-info pull-left"
+                                    id="back_btn"
+                                    value="Back" />
                             </div>
                         </div>
                     </form>
                 </div>
-
             </div>
         )
     }

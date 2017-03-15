@@ -1,4 +1,5 @@
 import createContainer from 'UTIL/createContainer'
+import { injectReducer } from 'REDUCER'
 
 export default {
     path: '/',
@@ -31,6 +32,26 @@ export default {
 
                     cb(null, LoginContainer)
                 }, 'loginForm')
+            }
+        },
+
+        // 注册界面
+        {
+            path: 'register',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    // 立即注入 Reducer
+                    injectReducer('registerData', require('REDUCER/register').default)
+
+                    /* 组件链接state */
+                    const RegisterContainer = createContainer(
+                        ({registerData, userData}) => ({ registerData, userData }), // mapStateToProps
+                        require('ACTION/register').default, // mapActionCreators,
+                        require('COMPONENT/Auth/register').default // 木偶组件
+                    )
+
+                    cb(null, RegisterContainer)
+                }, 'registerForm')
             }
         },
 

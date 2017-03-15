@@ -42,6 +42,27 @@ UserService.prototype.authUser = function (userData) {
     }
 };
 
+UserService.prototype.checkUsername = function (username) {
+    let users = this.read();
+    let user = users.find(function (el) {
+        return el.username === username;
+    });
+    if (user) {
+        console.info('[INFO] the username is existed');
+        return false;
+    } else {
+        return true;
+    }
+}
+
+UserService.prototype.registerUser = function ({username, password}) {
+    let users = this.read();
+    let user = { username, password };
+    users.push(user);
+    this.save(users);
+    return user;
+}
+
 // UserService.prototype.logout = function () {
 //     this.delDb();
 // };

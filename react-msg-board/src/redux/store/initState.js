@@ -5,6 +5,8 @@ export default {
     /* 用户 session */
     userData: null,
 
+    registerData: true, // 注册名是否不存在。默认不存在，验证存在则为true
+
     /* 留言板模块(按需加载) */
     msg: {
         msgs: [], // 当前显示的留言列表

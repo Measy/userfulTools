@@ -23,6 +23,21 @@ class UserService {
     logout() {
         return xhr({ url: '/logout' })
     }
+
+    register(userData) {
+        return xhr({
+            method: 'post',
+            url: '/register',
+            body: userData
+        })
+    }
+
+    checkUsername(username) {
+        return xhr({
+            method: 'get',
+            url: `/register?username=${username}`
+        })
+    }
 }
 
 export default new UserService()
