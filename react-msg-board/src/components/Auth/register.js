@@ -34,6 +34,8 @@ export default class ResisterForm extends Component {
     }
 
     render() {
+        let {registerData} = this.props
+
         return (
             <div className="container">
 
@@ -59,7 +61,10 @@ export default class ResisterForm extends Component {
                                     autofocus="autofocus"
                                     value={this.state.username}
                                     onChange={this.handleChange}
-                                    onBlur={(e) => {this.checkUsername()}} />
+                                    onBlur={(e) => { this.checkUsername() } } />
+                                {!registerData ?
+                                    <span>用户名被占用</span> : ''
+                                }
                             </div>
                             <div className="form-group">
                                 <i className="fa fa-lock fa-lg"></i>

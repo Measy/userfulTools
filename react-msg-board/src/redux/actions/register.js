@@ -30,8 +30,11 @@ const checkUsername = (username) => {
         userService
             .checkUsername(username)
             .then((re) => {
-                if (!re) dispatch({ type: USERNAME_EXISTED })
-                dispatch({ type: USERNAME_VAILD })
+                if (!re) {
+                    dispatch({ type: USERNAME_EXISTED })
+                } else {
+                    dispatch({ type: USERNAME_VAILD })
+                }
             })
     }
 }

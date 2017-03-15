@@ -33,7 +33,6 @@ exports.get = {
         if(isVaild){
             res.json(true);
         }else{
-            res.status(412);
             res.json(false);
         }
     }
