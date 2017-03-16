@@ -54,7 +54,7 @@ export default class ResisterForm extends Component {
                             <div className="form-group">
                                 <i className="fa fa-user fa-lg"></i>
                                 <input
-                                    className="form-control required"
+                                    className={'form-control required ' + (!registerData ? 'warnning' : '')}
                                     type="text"
                                     placeholder="Username"
                                     name="username"

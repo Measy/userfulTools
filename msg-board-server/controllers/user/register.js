@@ -26,8 +26,7 @@ exports.get = {
     handler: function (req, res, next) {
         let username = req.query.username;
         if(!username){
-            res.status(412);
-            return next({_msg: 'username is null'});
+            res.json(false);
         }
         let isVaild = userService.checkUsername(username);
         if(isVaild){
